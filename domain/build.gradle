@@ -1,0 +1,33 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = 1.7
+//noinspection GroovyUnusedAssignment
+targetCompatibility = 1.7
+
+configurations {
+  provided
+}
+
+sourceSets {
+  main.compileClasspath += configurations.provided
+  main.java.srcDirs += 'src/main/kotlin'
+  test.java.srcDirs += 'src/test/kotlin'
+}
+
+kapt {
+  generateStubs = true
+}
+
+dependencies {
+  def domainDependencies = rootProject.ext.domainDependencies
+
+  kapt domainDependencies.daggerCompiler
+
+  provided domainDependencies.javaxAnnotation
+
+  compile domainDependencies.kotlin
+  compile domainDependencies.rxJava
+  compile domainDependencies.dagger
+}

@@ -1,0 +1,31 @@
+allprojects {
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+}
+
+ext {
+  //Gradle
+  gradleBuildToolsVersion = "1.5.0"
+
+  // Kotlin
+  kotlinVersion = "1.0.0"
+
+  // Java
+  javaxAnnotationVersion = "1.0"
+
+  // Rx
+  rxJavaVersion = "1.1.1"
+
+  // Google
+  daggerVersion = "2.0.2"
+
+  domainDependencies = [
+      kotlin         : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+      javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
+      rxJava         : "io.reactivex:rxjava:$rxJavaVersion",
+      dagger         : "com.google.dagger:dagger:$daggerVersion",
+      daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion",
+  ]
+}
