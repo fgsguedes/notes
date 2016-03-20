@@ -1,4 +1,4 @@
-package br.com.hardcoded.notes.presentation.common.activity
+package br.com.hardcoded.notes.app.common.ui.activity
 
 import android.support.v7.app.AppCompatActivity
 

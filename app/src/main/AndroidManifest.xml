@@ -9,7 +9,7 @@
       android:theme="@style/AppTheme"
       android:name=".App">
 
-    <activity android:name=".presentation.listnotes.ListNotesActivity">
+    <activity android:name=".app.listnotes.ui.activity.ListNotesActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
