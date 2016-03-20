@@ -1,11 +1,14 @@
 package br.com.hardcoded.notes.app.listnotes.presenter
 
 import android.os.Bundle
+import android.util.Log
 import br.com.hardcoded.notes.app.listnotes.view.ListNotesView
-import br.com.hardcoded.notes.domain.model.Label
-import br.com.hardcoded.notes.domain.model.Note
+import br.com.hardcoded.notes.domain.usecase.GetNoteListUseCase
+import rx.observers.Subscribers
 
-class ListNotesPresenterImpl : ListNotesPresenter {
+class ListNotesPresenterImpl(
+    private val getNoteListUseCase: GetNoteListUseCase
+) : ListNotesPresenter {
 
   lateinit var view: ListNotesView
 
@@ -14,11 +17,16 @@ class ListNotesPresenterImpl : ListNotesPresenter {
   }
 
   override fun onCreate(savedState: Bundle?, intentExtras: Bundle?) {
-    val dummyNote = Note(1, "Dummy note", "Soon this will be big", Label(1, "Hello world"))
-
-    view.showNote(dummyNote)
+    getNoteListUseCase.subscribe(Subscribers.create(
+        { it.firstOrNull()?.apply { view.showNote(this) } },
+        { Log.e(TAG, "Unable do get notes", it) }
+    ))
   }
 
   override fun onSaveInstanceState(bundle: Bundle?) {
+  }
+
+  companion object {
+    val TAG = ListNotesPresenterImpl::class.java.simpleName
   }
 }
