@@ -10,7 +10,7 @@ ext {
   gradleBuildToolsVersion = "1.5.0"
 
   // Kotlin
-  kotlinVersion = "1.0.0"
+  kotlinVersion = "1.0.1"
 
   // Java
   javaxAnnotationVersion = "1.0"
