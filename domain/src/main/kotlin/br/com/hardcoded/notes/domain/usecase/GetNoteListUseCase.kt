@@ -6,9 +6,9 @@ import rx.Observable
 import javax.inject.Singleton
 
 @Singleton
-class GetNoteListUseCase : UseCase<Array<Note>>() {
+class GetNoteListUseCase : UseCase<List<Note>>() {
 
   val dummyNote = Note(1, "Dummy note", "Soon this will be big", Label(1, "Hello world"))
 
-  override fun buildObservable() = Observable.just(arrayOf(dummyNote))
+  override fun buildObservable() = Observable.just(listOf(dummyNote))
 }

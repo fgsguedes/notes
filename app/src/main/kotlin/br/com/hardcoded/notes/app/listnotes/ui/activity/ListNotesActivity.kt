@@ -35,7 +35,9 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     presenter.onCreate(savedInstanceState, intent.extras)
   }
 
-  override fun showNote(note: Note) {
-    dummyTextView.text = note.toString()
+  override fun showNotes(notes: List<Note>) {
+    notes.firstOrNull()?.let { note ->
+      dummyTextView.text = note.toString()
+    }
   }
 }
