@@ -40,4 +40,12 @@ ext {
       daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion",
       appCompatV7    : "com.android.support:appcompat-v7:$supportLibraryVersion"
   ]
+
+  dataDependencies = [
+      kotlin         : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+      javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
+      rxJava         : "io.reactivex:rxjava:$rxJavaVersion",
+      dagger         : "com.google.dagger:dagger:$daggerVersion",
+      daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion"
+  ]
 }
