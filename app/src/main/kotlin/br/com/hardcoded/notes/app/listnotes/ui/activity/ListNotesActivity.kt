@@ -7,12 +7,17 @@ import br.com.hardcoded.notes.app.common.ui.activity.BaseActivity
 import br.com.hardcoded.notes.app.injection.component.DaggerListNotesComponent
 import br.com.hardcoded.notes.app.listnotes.presenter.ListNotesPresenter
 import br.com.hardcoded.notes.app.listnotes.view.ListNotesView
+import br.com.hardcoded.notes.applicationComponent
 import br.com.hardcoded.notes.domain.model.Note
 import javax.inject.Inject
 
 class ListNotesActivity : BaseActivity(), ListNotesView {
 
-  val component by lazy { DaggerListNotesComponent.builder().build() }
+  val component by lazy {
+    DaggerListNotesComponent.builder()
+        .applicationComponent(application.applicationComponent)
+        .build()
+  }
 
   @Inject lateinit var presenter: ListNotesPresenter
 

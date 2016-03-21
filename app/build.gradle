@@ -40,6 +40,7 @@ dependencies {
   def appDependencies = rootProject.ext.appDependencies
 
   compile project(':domain')
+  compile project(':data')
 
   kapt appDependencies.daggerCompiler
   provided appDependencies.javaxAnnotation
