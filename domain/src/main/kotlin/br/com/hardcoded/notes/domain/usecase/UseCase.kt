@@ -6,11 +6,10 @@ import rx.subscriptions.Subscriptions
 
 abstract class UseCase<T> {
 
-  private val observable by lazy { buildObservable() }
   private var subscription = Subscriptions.empty()
 
-  fun subscribe(subscriber: Subscriber<T>) {
-    subscription = observable.subscribe(subscriber)
+  internal fun internalSubscribe(subscriber: Subscriber<T>) {
+    subscription = buildObservable().subscribe(subscriber)
   }
 
   fun unsubscribe() = subscription.unsubscribe()

@@ -20,6 +20,7 @@ ext {
 
   // Google
   daggerVersion = "2.0.2"
+  gsonVersion = "2.6.2"
 
   // Android
   supportLibraryVersion = "23.2.1"
@@ -46,6 +47,7 @@ ext {
       javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
       rxJava         : "io.reactivex:rxjava:$rxJavaVersion",
       dagger         : "com.google.dagger:dagger:$daggerVersion",
-      daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion"
+      daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion",
+      gson:"com.google.code.gson:gson:$gsonVersion"
   ]
 }

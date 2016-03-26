@@ -37,4 +37,5 @@ dependencies {
   compile dataDependencies.kotlin
   compile dataDependencies.rxJava
   compile dataDependencies.dagger
+  compile dataDependencies.gson
 }
