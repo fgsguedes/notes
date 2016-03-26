@@ -21,7 +21,7 @@ class NoteRepositoryImpl(
     }
   }
 
-  private fun notes() = preferences.getString(KEY_NOTES_LIST, "").let {
+  private fun notes() = preferences.getString(KEY_NOTES_LIST, "[]").let {
     json.parse(it, Array<Note>::class.java)
   }
 }
