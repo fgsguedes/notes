@@ -27,6 +27,7 @@ ext {
 
   domainDependencies = [
       kotlin         : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+      kotlinReflect  : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
       javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
       rxJava         : "io.reactivex:rxjava:$rxJavaVersion",
       dagger         : "com.google.dagger:dagger:$daggerVersion",
@@ -35,6 +36,7 @@ ext {
 
   appDependencies = [
       kotlin         : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+      kotlinReflect  : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
       javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
       rxJava         : "io.reactivex:rxjava:$rxJavaVersion",
       dagger         : "com.google.dagger:dagger:$daggerVersion",
@@ -44,10 +46,11 @@ ext {
 
   dataDependencies = [
       kotlin         : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+      kotlinReflect  : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
       javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
       rxJava         : "io.reactivex:rxjava:$rxJavaVersion",
       dagger         : "com.google.dagger:dagger:$daggerVersion",
       daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion",
-      gson:"com.google.code.gson:gson:$gsonVersion"
+      gson           : "com.google.code.gson:gson:$gsonVersion"
   ]
 }

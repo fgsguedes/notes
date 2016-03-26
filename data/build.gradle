@@ -30,11 +30,12 @@ dependencies {
 
   compile project(':domain')
 
-  provided dataDependencies.javaxAnnotation
+  compile dataDependencies.kotlin
+  compile dataDependencies.kotlinReflect
 
   kapt dataDependencies.daggerCompiler
+  provided dataDependencies.javaxAnnotation
 
-  compile dataDependencies.kotlin
   compile dataDependencies.rxJava
   compile dataDependencies.dagger
   compile dataDependencies.gson

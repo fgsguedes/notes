@@ -23,11 +23,12 @@ kapt {
 dependencies {
   def domainDependencies = rootProject.ext.domainDependencies
 
-  kapt domainDependencies.daggerCompiler
+  compile domainDependencies.kotlin
+  compile domainDependencies.kotlinReflect
 
+  kapt domainDependencies.daggerCompiler
   provided domainDependencies.javaxAnnotation
 
-  compile domainDependencies.kotlin
   compile domainDependencies.rxJava
   compile domainDependencies.dagger
 }

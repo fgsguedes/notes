@@ -42,10 +42,12 @@ dependencies {
   compile project(':domain')
   compile project(':data')
 
+  compile appDependencies.kotlin
+  compile appDependencies.kotlinReflect
+
   kapt appDependencies.daggerCompiler
   provided appDependencies.javaxAnnotation
 
-  compile appDependencies.kotlin
   compile appDependencies.rxJava
   compile appDependencies.dagger
   compile appDependencies.appCompatV7
