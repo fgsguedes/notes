@@ -1,4 +1,4 @@
-package br.com.hardcoded.notes.app.injection.module
+package br.com.hardcoded.notes.app.common.injection.module
 
 import android.content.SharedPreferences
 import br.com.hardcoded.notes.data.repository.Json

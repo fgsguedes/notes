@@ -1,8 +1,8 @@
-package br.com.hardcoded.notes.app.injection.component
+package br.com.hardcoded.notes.app.common.injection.component
 
 import android.content.Context
-import br.com.hardcoded.notes.app.injection.module.AndroidModule
-import br.com.hardcoded.notes.app.injection.module.RepositoryModule
+import br.com.hardcoded.notes.app.common.injection.module.AndroidModule
+import br.com.hardcoded.notes.app.common.injection.module.RepositoryModule
 import br.com.hardcoded.notes.domain.repository.NoteRepository
 import dagger.Component
 import javax.inject.Singleton

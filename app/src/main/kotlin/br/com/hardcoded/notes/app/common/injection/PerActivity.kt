@@ -1,4 +1,4 @@
-package br.com.hardcoded.notes.app.injection
+package br.com.hardcoded.notes.app.common.injection
 
 import javax.inject.Scope
 

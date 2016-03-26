@@ -1,4 +1,4 @@
-package br.com.hardcoded.notes.app.listnotes.ui.adapter
+package br.com.hardcoded.notes.app.note.ui.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

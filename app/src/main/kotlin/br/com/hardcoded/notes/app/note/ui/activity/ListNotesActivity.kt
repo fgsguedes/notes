@@ -1,4 +1,4 @@
-package br.com.hardcoded.notes.app.listnotes.ui.activity
+package br.com.hardcoded.notes.app.note.ui.activity
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -6,10 +6,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import br.com.hardcoded.notes.R
 import br.com.hardcoded.notes.app.common.ui.activity.BaseActivity
-import br.com.hardcoded.notes.app.injection.component.DaggerListNotesComponent
-import br.com.hardcoded.notes.app.listnotes.presenter.ListNotesPresenter
-import br.com.hardcoded.notes.app.listnotes.ui.adapter.NotesAdapter
-import br.com.hardcoded.notes.app.listnotes.view.ListNotesView
+import br.com.hardcoded.notes.app.note.injection.component.DaggerNotesComponent
+import br.com.hardcoded.notes.app.note.presenter.ListNotesPresenter
+import br.com.hardcoded.notes.app.note.ui.adapter.NotesAdapter
+import br.com.hardcoded.notes.app.note.view.ListNotesView
 import br.com.hardcoded.notes.applicationComponent
 import br.com.hardcoded.notes.domain.model.Note
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class ListNotesActivity : BaseActivity(), ListNotesView {
 
   val component by lazy {
-    DaggerListNotesComponent.builder()
+    DaggerNotesComponent.builder()
         .applicationComponent(application.applicationComponent)
         .build()
   }

@@ -1,4 +1,4 @@
-package br.com.hardcoded.notes.app.injection.module
+package br.com.hardcoded.notes.app.common.injection.module
 
 import android.app.Application
 import android.content.Context
