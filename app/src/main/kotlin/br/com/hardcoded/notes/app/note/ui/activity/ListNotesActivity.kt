@@ -2,9 +2,11 @@ package br.com.hardcoded.notes.app.note.ui.activity
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import br.com.hardcoded.notes.R
 import br.com.hardcoded.notes.app.common.applicationComponent
 import br.com.hardcoded.notes.app.common.ui.activity.BaseActivity
@@ -26,6 +28,8 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
   @Inject lateinit var presenter: ListNotesPresenter
 
   val recyclerNotesList by lazy { findViewById(R.id.recycler_notes_list) as RecyclerView }
+  val floatingActionButton by lazy { findViewById(R.id.fab) as FloatingActionButton }
+  val toolbar by lazy { findViewById(R.id.toolbar) as Toolbar }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -46,12 +50,10 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
   }
 
   private fun initUi(savedInstanceState: Bundle?) {
-    val toolbar = findViewById(R.id.toolbar) as Toolbar
     setSupportActionBar(toolbar)
-    supportActionBar?.title = getString(R.string.app_name)
+    floatingActionButton.setOnClickListener { presenter.onCreateNoteClicked() }
 
     val state = savedInstanceState?.getParcelable<Parcelable>(KEY_RECYCLER_VIEW_STATE)
-
     recyclerNotesList.layoutManager = LinearLayoutManager(this).apply {
       if (state != null) onRestoreInstanceState(state)
     }
@@ -66,7 +68,12 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     recyclerNotesList.adapter = NotesAdapter(this, notes)
   }
 
+  override fun showCreateNoteDialog() {
+    Log.e(TAG, "Eventually will show a create note dialog")
+  }
+
   companion object {
+    val TAG = ListNotesActivity::class.simpleName
     val KEY_RECYCLER_VIEW_STATE = "recyclerViewState"
   }
 }

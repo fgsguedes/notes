@@ -19,6 +19,10 @@ class ListNotesPresenterImpl(
     this.view = view
   }
 
+  override fun onCreateNoteClicked() {
+    view.showCreateNoteDialog()
+  }
+
   override fun onCreate(savedState: Bundle?, intentExtras: Bundle?) {
     getNoteListUseCase.subscribe(Subscribers.create(
         { notes -> view.showNotes(notes) },
