@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import br.com.hardcoded.notes.R
+import br.com.hardcoded.notes.app.common.applicationComponent
 import br.com.hardcoded.notes.app.common.ui.activity.BaseActivity
 import br.com.hardcoded.notes.app.note.injection.component.DaggerNotesComponent
 import br.com.hardcoded.notes.app.note.presenter.ListNotesPresenter
 import br.com.hardcoded.notes.app.note.ui.adapter.NotesAdapter
 import br.com.hardcoded.notes.app.note.view.ListNotesView
-import br.com.hardcoded.notes.app.common.applicationComponent
 import br.com.hardcoded.notes.domain.model.Note
 import javax.inject.Inject
 
@@ -45,6 +46,10 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
   }
 
   private fun initUi(savedInstanceState: Bundle?) {
+    val toolbar = findViewById(R.id.toolbar) as Toolbar
+    setSupportActionBar(toolbar)
+    supportActionBar?.title = getString(R.string.app_name)
+
     val state = savedInstanceState?.getParcelable<Parcelable>(KEY_RECYCLER_VIEW_STATE)
 
     recyclerNotesList.layoutManager = LinearLayoutManager(this).apply {
