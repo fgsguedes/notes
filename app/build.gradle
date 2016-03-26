@@ -50,5 +50,5 @@ dependencies {
 
   compile appDependencies.rxJava
   compile appDependencies.dagger
-  compile appDependencies.appCompatV7
+  compile appDependencies.designSupportLibrary
 }
