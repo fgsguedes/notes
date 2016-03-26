@@ -10,7 +10,7 @@ import br.com.hardcoded.notes.app.note.injection.component.DaggerNotesComponent
 import br.com.hardcoded.notes.app.note.presenter.ListNotesPresenter
 import br.com.hardcoded.notes.app.note.ui.adapter.NotesAdapter
 import br.com.hardcoded.notes.app.note.view.ListNotesView
-import br.com.hardcoded.notes.applicationComponent
+import br.com.hardcoded.notes.app.common.applicationComponent
 import br.com.hardcoded.notes.domain.model.Note
 import javax.inject.Inject
 
