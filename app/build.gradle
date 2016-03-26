@@ -11,6 +11,8 @@ android {
     targetSdkVersion 23
     versionCode 1
     versionName "1.0"
+
+    vectorDrawables.useSupportLibrary = true
   }
 
   buildTypes {
@@ -50,5 +52,7 @@ dependencies {
 
   compile appDependencies.rxJava
   compile appDependencies.dagger
+
   compile appDependencies.designSupportLibrary
+  compile appDependencies.supportVectorDrawable
 }
