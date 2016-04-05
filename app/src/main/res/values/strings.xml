@@ -8,4 +8,6 @@
   <string name="new_note_dialog_title">New note</string>
 
   <string name="save">Save</string>
+  <string name="activity_label_new_note">New note</string>
+  <string name="done">Done</string>
 </resources>

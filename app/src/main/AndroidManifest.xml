@@ -19,6 +19,11 @@
       </intent-filter>
     </activity>
 
+    <activity
+        android:name=".app.note.ui.activity.CreateNoteActivity"
+        android:label="@string/activity_label_new_note"
+        android:parentActivityName=".app.note.ui.activity.ListNotesActivity"/>
+
   </application>
 
 </manifest>

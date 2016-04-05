@@ -12,9 +12,9 @@ import br.com.hardcoded.notes.app.common.ui.activity.BaseActivity
 import br.com.hardcoded.notes.app.note.injection.component.DaggerNotesComponent
 import br.com.hardcoded.notes.app.note.presenter.ListNotesPresenter
 import br.com.hardcoded.notes.app.note.ui.adapter.NotesAdapter
-import br.com.hardcoded.notes.app.note.ui.dialog.CreateNoteDialogFragment
 import br.com.hardcoded.notes.app.note.view.ListNotesView
 import br.com.hardcoded.notes.domain.model.Note
+import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
 class ListNotesActivity : BaseActivity(), ListNotesView {
@@ -68,12 +68,9 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     recyclerNotesList.adapter = NotesAdapter(this, notes)
   }
 
-  override fun showCreateNoteDialog() {
-    CreateNoteDialogFragment().show(supportFragmentManager, CreateNoteDialogFragment::class.simpleName)
-  }
+  override fun openCreateNoteForm() = startActivity<CreateNoteActivity>()
 
   companion object {
-    val TAG = ListNotesActivity::class.simpleName
     val KEY_RECYCLER_VIEW_STATE = "recyclerViewState"
   }
 }

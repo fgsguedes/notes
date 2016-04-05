@@ -20,7 +20,7 @@ class ListNotesPresenterImpl(
   }
 
   override fun onCreateNoteClicked() {
-    view.showCreateNoteDialog()
+    view.openCreateNoteForm()
   }
 
   override fun onCreate(savedState: Bundle?, intentExtras: Bundle?) {
