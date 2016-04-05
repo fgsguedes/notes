@@ -46,6 +46,7 @@ dependencies {
 
   compile appDependencies.kotlin
   compile appDependencies.kotlinReflect
+  compile appDependencies.anko
 
   kapt appDependencies.daggerCompiler
   provided appDependencies.javaxAnnotation

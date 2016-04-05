@@ -10,7 +10,8 @@ ext {
   gradleBuildToolsVersion = "2.1.0-alpha4"
 
   // Kotlin
-  kotlinVersion = "1.0.1"
+  kotlinVersion = "1.0.1-2"
+  ankoVersion = "0.8.3"
 
   // Java
   javaxAnnotationVersion = "1.0"
@@ -37,6 +38,7 @@ ext {
   appDependencies = [
       kotlin               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
       kotlinReflect        : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
+      anko                 : "org.jetbrains.anko:anko-sdk15:$ankoVersion",
       javaxAnnotation      : "javax.annotation:jsr250-api:$javaxAnnotationVersion",
       rxJava               : "io.reactivex:rxjava:$rxJavaVersion",
       dagger               : "com.google.dagger:dagger:$daggerVersion",
