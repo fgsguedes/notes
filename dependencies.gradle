@@ -7,7 +7,7 @@ allprojects {
 
 ext {
   //Gradle
-  gradleBuildToolsVersion = "2.1.0-alpha4"
+  gradleBuildToolsVersion = "2.1.0-alpha5"
 
   // Kotlin
   kotlinVersion = "1.0.1-2"
