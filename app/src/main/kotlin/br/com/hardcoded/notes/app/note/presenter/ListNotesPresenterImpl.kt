@@ -13,7 +13,7 @@ class ListNotesPresenterImpl(
     private val createNoteUseCase: CreateNoteUseCase
 ) : ListNotesPresenter {
 
-  lateinit var view: ListNotesView
+  private lateinit var view: ListNotesView
 
   override fun bindView(view: ListNotesView) {
     this.view = view
