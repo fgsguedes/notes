@@ -5,5 +5,5 @@ import rx.Observable
 
 interface NoteRepository {
   fun list(): Observable<List<Note>>
-  fun create(note: Note): Observable<Unit>
+  fun create(title: String, content: String?): Observable<Note>
 }

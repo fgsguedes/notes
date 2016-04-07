@@ -9,8 +9,7 @@ import br.com.hardcoded.notes.domain.usecase.GetNoteListUseCase
 import rx.observers.Subscribers
 
 class ListNotesPresenterImpl(
-    private val getNoteListUseCase: GetNoteListUseCase,
-    private val createNoteUseCase: CreateNoteUseCase
+    private val getNoteListUseCase: GetNoteListUseCase
 ) : ListNotesPresenter {
 
   private lateinit var view: ListNotesView
@@ -31,14 +30,6 @@ class ListNotesPresenterImpl(
   }
 
   override fun onSaveInstanceState(outState: Bundle?) {
-  }
-
-  override fun create(note: Note) {
-    createNoteUseCase.subscribe(note, Subscribers.create(
-        {}, // Do nothing on `onNext`
-        { error -> Log.e(TAG, "Unable to create note", error) },
-        { Log.i(TAG, "Note created") }
-    ))
   }
 
   companion object {

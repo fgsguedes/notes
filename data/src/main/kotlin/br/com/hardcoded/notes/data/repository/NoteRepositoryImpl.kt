@@ -11,17 +11,31 @@ class NoteRepositoryImpl(
 ) : NoteRepository {
   val KEY_NOTES_LIST = "notesList"
 
-  override fun list() = Observable.just(notes().toList())
+  val lock = Any()
 
-  override fun create(note: Note) = Observable.create<Unit> { subscriber ->
+  override fun list() = synchronized(lock) {
+    Observable.just(notes().toList())
+  }
+
+  override fun create(title: String, content: String?) = synchronized(lock) {
+    val note = Note(nextId(), title, content)
+
     json.format(arrayOf(*notes(), note)).let { resultingJson ->
       preferences.edit()
           .putString(KEY_NOTES_LIST, resultingJson)
-          .apply { subscriber.onCompleted() }
+          .apply()
+    }
+
+    Observable.just(note)
+  }
+
+  private fun notes() = synchronized(lock) {
+    preferences.getString(KEY_NOTES_LIST, "[]").let {
+      json.parse(it, Array<Note>::class)
     }
   }
 
-  private fun notes() = preferences.getString(KEY_NOTES_LIST, "[]").let {
-    json.parse(it, Array<Note>::class)
+  private fun nextId() = synchronized(lock) {
+    (notes().map { it.id }.max() ?: 0) + 1
   }
 }
