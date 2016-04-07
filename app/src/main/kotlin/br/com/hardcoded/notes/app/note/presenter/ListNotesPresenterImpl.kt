@@ -30,7 +30,7 @@ class ListNotesPresenterImpl(
     ))
   }
 
-  override fun onSaveInstanceState(bundle: Bundle?) {
+  override fun onSaveInstanceState(outState: Bundle?) {
   }
 
   override fun create(note: Note) {
