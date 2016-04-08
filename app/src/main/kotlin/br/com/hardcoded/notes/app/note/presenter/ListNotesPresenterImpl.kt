@@ -3,8 +3,6 @@ package br.com.hardcoded.notes.app.note.presenter
 import android.os.Bundle
 import android.util.Log
 import br.com.hardcoded.notes.app.note.view.ListNotesView
-import br.com.hardcoded.notes.domain.model.Note
-import br.com.hardcoded.notes.domain.usecase.CreateNoteUseCase
 import br.com.hardcoded.notes.domain.usecase.GetNoteListUseCase
 import rx.observers.Subscribers
 
