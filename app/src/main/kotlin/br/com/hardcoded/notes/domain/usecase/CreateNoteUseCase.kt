@@ -6,14 +6,16 @@ import rx.Subscriber
 
 class CreateNoteUseCase(
     private val noteRepository: NoteRepository
-): UseCase<Unit>() {
+): UseCase<Note>() {
 
-  lateinit var note: Note
+  lateinit var title: String
+  var content: String? = null
 
-  fun subscribe(note: Note, subscriber: Subscriber<Unit>) {
-    this.note = note
+  fun subscribe(title: String, content: String?, subscriber: Subscriber<Note>) {
+    this.title = title
+    this.content = content
     internalSubscribe(subscriber)
   }
 
-  override fun buildObservable() = noteRepository.create(note)
+  override fun buildObservable() = noteRepository.create(title, content)
 }

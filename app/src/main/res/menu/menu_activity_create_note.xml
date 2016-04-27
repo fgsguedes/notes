@@ -5,7 +5,7 @@
 
   <item
       android:id="@+id/menu_item_done_creating_note"
-      android:icon="@drawable/ic_done_black_24dp"
+      android:icon="@drawable/ic_done_white_24dp"
       android:title="@string/done"
       app:showAsAction="always"/>
 

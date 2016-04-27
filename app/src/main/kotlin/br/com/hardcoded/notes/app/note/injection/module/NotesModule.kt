@@ -17,14 +17,17 @@ class NotesModule {
 
   @Provides
   fun provideListNotesPresenter(
-      getNoteListUseCase: GetNoteListUseCase,
-      createNoteUseCase: CreateNoteUseCase
+      getNoteListUseCase: GetNoteListUseCase
   ): ListNotesPresenter {
-    return ListNotesPresenterImpl(getNoteListUseCase, createNoteUseCase)
+    return ListNotesPresenterImpl(getNoteListUseCase)
   }
 
   @Provides
-  fun provideCreateNotePresenter(): CreateNotePresenter = CreateNotePresenterImpl()
+  fun provideCreateNotePresenter(
+      createNoteUseCase: CreateNoteUseCase
+  ): CreateNotePresenter {
+    return CreateNotePresenterImpl(createNoteUseCase)
+  }
 
   @Provides
   fun provideListNotesUseCase(noteRepository: NoteRepository) = GetNoteListUseCase(noteRepository)
