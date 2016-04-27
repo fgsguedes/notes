@@ -41,19 +41,18 @@ kapt {
 dependencies {
   def appDependencies = rootProject.ext.appDependencies
 
-  compile project(':domain')
-  compile project(':data')
+  kapt appDependencies.daggerCompiler
+  provided appDependencies.javaxAnnotation
 
   compile appDependencies.kotlin
   compile appDependencies.kotlinReflect
   compile appDependencies.anko
-
-  kapt appDependencies.daggerCompiler
-  provided appDependencies.javaxAnnotation
 
   compile appDependencies.rxJava
   compile appDependencies.dagger
 
   compile appDependencies.designSupportLibrary
   compile appDependencies.supportVectorDrawable
+
+  compile appDependencies.gson
 }

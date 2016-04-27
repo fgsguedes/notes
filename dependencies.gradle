@@ -26,15 +26,6 @@ ext {
   // Android
   supportLibraryVersion = "23.2.1"
 
-  domainDependencies = [
-      kotlin         : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
-      kotlinReflect  : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
-      javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
-      rxJava         : "io.reactivex:rxjava:$rxJavaVersion",
-      dagger         : "com.google.dagger:dagger:$daggerVersion",
-      daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion"
-  ]
-
   appDependencies = [
       kotlin               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
       kotlinReflect        : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
@@ -44,16 +35,7 @@ ext {
       dagger               : "com.google.dagger:dagger:$daggerVersion",
       daggerCompiler       : "com.google.dagger:dagger-compiler:$daggerVersion",
       designSupportLibrary : "com.android.support:design:$supportLibraryVersion",
-      supportVectorDrawable: "com.android.support:support-vector-drawable:$supportLibraryVersion"
-  ]
-
-  dataDependencies = [
-      kotlin         : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
-      kotlinReflect  : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
-      javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
-      rxJava         : "io.reactivex:rxjava:$rxJavaVersion",
-      dagger         : "com.google.dagger:dagger:$daggerVersion",
-      daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion",
+      supportVectorDrawable: "com.android.support:support-vector-drawable:$supportLibraryVersion",
       gson           : "com.google.code.gson:gson:$gsonVersion"
   ]
 }
