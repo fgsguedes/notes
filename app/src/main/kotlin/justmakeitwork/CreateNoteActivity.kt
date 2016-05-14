@@ -67,6 +67,7 @@ class CreateNoteActivity : AppCompatActivity() {
 
     val id = database.insert("Note", null, contentValues)
     database.setTransactionSuccessful()
+    database.endTransaction()
     database.close()
 
     Toast.makeText(this, "Note created with ID: $id", Toast.LENGTH_SHORT).show()
