@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import br.com.hardcoded.notes.R
+import br.com.hardcoded.notes.domain.model.Note
 
 class ListNotesActivity : AppCompatActivity() {
 
@@ -41,18 +42,41 @@ class ListNotesActivity : AppCompatActivity() {
 }
 
 //region Adapters
-class StringArrayAdapter(context: Context) : RecyclerView.Adapter<StringViewHolder>() {
+class StringArrayAdapter(
+    private val context: Context
+) : RecyclerView.Adapter<StringViewHolder>() {
 
   val inflater by lazy { LayoutInflater.from(context) }
-  val items = arrayOf("First item", "Second item", "Third item", "Fourth item")
+  val items by lazy { listNotes() }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StringViewHolder(inflater.inflate(android.R.layout.simple_list_item_1, parent, false))
 
   override fun onBindViewHolder(holder: StringViewHolder, position: Int) {
-    holder.textView.text = items[position]
+    holder.textView.text = items[position].title
   }
 
   override fun getItemCount() = items.size
+
+  private fun listNotes(): Array<Note> {
+    val databaseHelper = DatabaseHelper(context)
+    val database = databaseHelper.readableDatabase
+
+    val cursor = database.query("Note",
+        arrayOf("id", "title", "content"),
+        null, null, null, null, "id desc", null)
+
+    val notes = mutableListOf<Note>()
+
+    while (cursor.moveToNext()) {
+      notes.add(Note(
+          cursor.getLong(cursor.getColumnIndex("id")),
+          cursor.getString(cursor.getColumnIndex("title")),
+          cursor.getString(cursor.getColumnIndex("content"))
+      ))
+    }
+
+    return notes.toTypedArray()
+  }
 }
 
 class StringViewHolder(view: View) : RecyclerView.ViewHolder(view) {
