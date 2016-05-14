@@ -19,7 +19,7 @@ val EditText.nullableStringContent: String?
   }
 
 // To be used with view-click in conjunction with single-line `when` clauses
-fun AppCompatActivity.execute(f: () -> Unit): Boolean {
+fun AppCompatActivity.returningTrue(f: () -> Unit): Boolean {
   f()
   return true
 }

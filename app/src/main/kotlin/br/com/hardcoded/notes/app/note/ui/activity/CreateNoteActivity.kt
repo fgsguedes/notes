@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.widget.EditText
 import br.com.hardcoded.notes.R
 import br.com.hardcoded.notes.app.common.applicationComponent
-import br.com.hardcoded.notes.app.common.execute
+import br.com.hardcoded.notes.app.common.returningTrue
 import br.com.hardcoded.notes.app.common.nullableStringContent
 import br.com.hardcoded.notes.app.common.ui.activity.BaseActivity
 import br.com.hardcoded.notes.app.note.injection.component.DaggerNotesComponent
@@ -55,13 +55,13 @@ class CreateNoteActivity : BaseActivity(), CreateNoteView, AnkoLogger {
     presenter.onCreate(savedInstanceState, intent.extras)
   }
 
-  override fun onCreateOptionsMenu(menu: Menu) = execute {
+  override fun onCreateOptionsMenu(menu: Menu) = returningTrue {
     menuInflater.inflate(R.menu.menu_activity_create_note, menu)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
-      R.id.menu_item_done_creating_note -> execute {
+      R.id.menu_item_done_creating_note -> returningTrue {
         presenter.doneClicked()
       }
       else -> false
