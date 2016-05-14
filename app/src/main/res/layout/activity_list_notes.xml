@@ -16,14 +16,16 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:elevation="4dp"
-        app:layout_scrollFlags="scroll|enterAlways"/>
+        app:layout_scrollFlags="enterAlways"/>
 
   </android.support.design.widget.AppBarLayout>
 
   <android.support.v7.widget.RecyclerView
       android:id="@+id/recycler_notes_list"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+      android:layout_height="match_parent"
+      android:paddingTop="8dp"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
   <android.support.design.widget.FloatingActionButton
       android:id="@+id/fab"
