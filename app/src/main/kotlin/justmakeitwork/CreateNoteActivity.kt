@@ -22,7 +22,7 @@ class CreateNoteActivity : AppCompatActivity() {
   private val editTextTitle by lazy { findViewById(R.id.edit_text_note_title) as EditText }
   private val editTextContent by lazy { findViewById(R.id.edit_text_note_content) as EditText }
 
-  private val databaseHelper by lazy { Database(this) }
+  private val databaseHelper by lazy { DatabaseHelper(this) }
   //endregion
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +74,7 @@ class CreateNoteActivity : AppCompatActivity() {
   }
 }
 
-class Database(
+class DatabaseHelper(
     context: Context
 ) : SQLiteOpenHelper(context, "notes.db", null, 1) {
 
@@ -87,6 +87,7 @@ class Database(
 
   private fun createNoteSql(): String {
     return "create table Note (" +
+        "id integer primary key autoincrement," +
         "title text," +
         "content text" +
         ")"
