@@ -2,20 +2,20 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
   <TextView
       android:id="@+id/adapter_row_list_notes_title"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:textAppearance="@style/TextAppearance.AppCompat.Large"
       tools:text="Dummy text"/>
 
   <TextView
       android:id="@+id/adapter_row_list_notes_content"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:textAppearance="@style/TextAppearance.AppCompat.Small"
       tools:text="Dummy text"/>
