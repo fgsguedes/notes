@@ -57,7 +57,7 @@ class ListNotesActivity : AppCompatActivity() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     val note = data?.getParcelableExtra<Note>("note")
-    val position = data?.getIntExtra("position", 0) as Int
+    val position = data?.getIntExtra("position", 0) ?: 0
 
     if (resultCode != RESULT_OK || note == null) {
       super.onActivityResult(requestCode, resultCode, data)
