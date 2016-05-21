@@ -21,6 +21,7 @@ class ListNotesActivity : AppCompatActivity() {
   //region Fields
   private val toolbar by lazy { findViewById(R.id.toolbar) as Toolbar }
   private val recyclerView by lazy { findViewById(R.id.recycler_notes_list) as RecyclerView }
+  private val adapter by lazy { StringArrayAdapter(this) }
   private val fab by lazy { findViewById(R.id.fab) as FloatingActionButton }
   //endregion
 
@@ -34,7 +35,10 @@ class ListNotesActivity : AppCompatActivity() {
 
   private fun showList() {
     recyclerView.layoutManager = LinearLayoutManager(this)
-    recyclerView.adapter = StringArrayAdapter(this)
+    recyclerView.adapter = adapter
+
+    adapter.clickListener = { note ->
+    }
   }
 
   private fun setUpClickListeners() {
@@ -66,10 +70,12 @@ class ListNotesActivity : AppCompatActivity() {
 //region Adapters
 class StringArrayAdapter(
     private val context: Context
-) : RecyclerView.Adapter<StringViewHolder>() {
+) : RecyclerView.Adapter<StringArrayAdapter.StringViewHolder>() {
 
   val inflater by lazy { LayoutInflater.from(context) }
   val items by lazy { listNotes() }
+
+  var clickListener: ((Note) -> Unit)? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StringViewHolder(inflater.inflate(R.layout.adaper_row_list_notes, parent, false))
 
@@ -112,14 +118,18 @@ class StringArrayAdapter(
     items.add(i, note)
     notifyItemInserted(i)
   }
-}
 
-class StringViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-  val titleTextView by lazy { view.findViewById(R.id.adapter_row_list_notes_title) as TextView }
-  val contentTextView by lazy { view.findViewById(R.id.adapter_row_list_notes_content) as TextView }
+  inner class StringViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-  init {
-    println("lala")
+    val titleTextView by lazy { view.findViewById(R.id.adapter_row_list_notes_title) as TextView }
+    val contentTextView by lazy { view.findViewById(R.id.adapter_row_list_notes_content) as TextView }
+
+    init {
+      view.setOnClickListener {
+        val note = items[adapterPosition]
+        clickListener?.invoke(note)
+      }
+    }
   }
 }
 //endregion
