@@ -71,10 +71,13 @@ class StringArrayAdapter(
   val inflater by lazy { LayoutInflater.from(context) }
   val items by lazy { listNotes() }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StringViewHolder(inflater.inflate(android.R.layout.simple_list_item_1, parent, false))
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StringViewHolder(inflater.inflate(R.layout.adaper_row_list_notes, parent, false))
 
   override fun onBindViewHolder(holder: StringViewHolder, position: Int) {
-    holder.textView.text = items[position].title
+    val note = items[position]
+
+    holder.titleTextView.text = note.title
+    holder.contentTextView.text = note.content
   }
 
   override fun getItemCount() = items.size
@@ -112,6 +115,11 @@ class StringArrayAdapter(
 }
 
 class StringViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-  val textView by lazy { view.findViewById(android.R.id.text1) as TextView }
+  val titleTextView by lazy { view.findViewById(R.id.adapter_row_list_notes_title) as TextView }
+  val contentTextView by lazy { view.findViewById(R.id.adapter_row_list_notes_content) as TextView }
+
+  init {
+    println("lala")
+  }
 }
 //endregion
