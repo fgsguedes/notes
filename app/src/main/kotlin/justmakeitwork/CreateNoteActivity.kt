@@ -2,6 +2,7 @@ package justmakeitwork
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.EditText
 import android.widget.Toast
 import br.com.hardcoded.notes.R
 import br.com.hardcoded.notes.app.common.returningTrue
+import br.com.hardcoded.notes.domain.model.Note
 
 class CreateNoteActivity : AppCompatActivity() {
 
@@ -70,7 +72,11 @@ class CreateNoteActivity : AppCompatActivity() {
     database.endTransaction()
     database.close()
 
-    Toast.makeText(this, "Note created with ID: $id", Toast.LENGTH_SHORT).show()
+    val resultIntent = Intent().apply {
+      putExtra("createdNote", Note(id, title, content))
+    }
+
+    setResult(RESULT_OK, resultIntent)
     finish()
   }
 }

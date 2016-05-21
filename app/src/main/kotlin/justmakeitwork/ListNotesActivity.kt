@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import br.com.hardcoded.notes.R
 import br.com.hardcoded.notes.domain.model.Note
 
@@ -37,7 +38,28 @@ class ListNotesActivity : AppCompatActivity() {
   }
 
   private fun setUpClickListeners() {
-    fab.setOnClickListener { startActivity(Intent(this, CreateNoteActivity::class.java)) }
+    fab.setOnClickListener {
+      startActivityForResult(
+          Intent(this, CreateNoteActivity::class.java),
+          ActivityRequestCodes.createNote
+      )
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    val createdNote = requestCode == ActivityRequestCodes.createNote &&
+        resultCode == RESULT_OK
+
+    if (!createdNote) {
+      super.onActivityResult(requestCode, resultCode, data)
+      return
+    }
+
+    receivedNote(data.getParcelableExtra<Note>("createdNote"))
+  }
+
+  private fun receivedNote(note: Note) {
+    (recyclerView.adapter as StringArrayAdapter).addElement(note)
   }
 }
 
@@ -57,7 +79,7 @@ class StringArrayAdapter(
 
   override fun getItemCount() = items.size
 
-  private fun listNotes(): Array<Note> {
+  private fun listNotes(): MutableList<Note> {
     val databaseHelper = DatabaseHelper(context)
     val database = databaseHelper.readableDatabase
 
@@ -75,7 +97,17 @@ class StringArrayAdapter(
       ))
     }
 
-    return notes.toTypedArray()
+    return notes
+  }
+
+  fun addElement(note: Note) {
+    addElement(note, 0)
+  }
+
+  fun addElement(note: Note, position: Int) {
+    val i = Math.min(position, items.size)
+    items.add(i, note)
+    notifyItemInserted(i)
   }
 }
 
