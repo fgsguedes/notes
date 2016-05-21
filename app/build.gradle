@@ -45,7 +45,6 @@ dependencies {
   provided appDependencies.javaxAnnotation
 
   compile appDependencies.kotlin
-  compile appDependencies.kotlinReflect
   compile appDependencies.anko
 
   compile appDependencies.rxJava
