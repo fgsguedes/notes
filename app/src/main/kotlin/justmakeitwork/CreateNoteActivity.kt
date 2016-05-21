@@ -25,12 +25,25 @@ class CreateNoteActivity : AppCompatActivity() {
   private val editTextContent by lazy { findViewById(R.id.edit_text_note_content) as EditText }
 
   private val databaseHelper by lazy { DatabaseHelper(this) }
+
+  private var note: Note? = null
+  private var position = 0
   //endregion
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_create_note)
     setSupportActionBar(toolbar)
+
+    val bundle = savedInstanceState ?: intent.extras
+
+    note = bundle?.getParcelable("note")
+    position = bundle?.getInt("position", 0) as Int
+
+    note?.let {
+      editTextTitle.setText(it.title)
+      editTextContent.setText(it.content)
+    }
   }
 
   //region Android Overrides
@@ -41,7 +54,10 @@ class CreateNoteActivity : AppCompatActivity() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
       R.id.menu_item_done_creating_note -> ifFormIsValid { title, content ->
-        saveNote(title, content)
+        when {
+          note == null -> saveNote(title, content)
+          else -> note?.let { editNote(it, title, content) }
+        }
       }
       else -> false
     }
@@ -74,6 +90,29 @@ class CreateNoteActivity : AppCompatActivity() {
 
     val resultIntent = Intent().apply {
       putExtra("createdNote", Note(id, title, content))
+    }
+
+    setResult(RESULT_OK, resultIntent)
+    finish()
+  }
+
+  private fun editNote(note: Note, title: String, content: String) {
+    val database = databaseHelper.writableDatabase
+    val transaction = database.beginTransaction()
+
+    val contentValues = ContentValues().apply {
+      put("title", title)
+      put("content", content)
+    }
+
+    database.update("Note", contentValues, "id=?", arrayOf(note.id.toString()))
+    database.setTransactionSuccessful()
+    database.endTransaction()
+    database.close()
+
+    val resultIntent = Intent().apply {
+      putExtra("note", note.copy(title = title, content = content))
+      putExtra("position", position)
     }
 
     setResult(RESULT_OK, resultIntent)

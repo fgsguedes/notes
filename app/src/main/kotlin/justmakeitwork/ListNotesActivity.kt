@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import br.com.hardcoded.notes.R
 import br.com.hardcoded.notes.domain.model.Note
 
@@ -37,7 +36,13 @@ class ListNotesActivity : AppCompatActivity() {
     recyclerView.layoutManager = LinearLayoutManager(this)
     recyclerView.adapter = adapter
 
-    adapter.clickListener = { note ->
+    adapter.clickListener = { note, position ->
+      startActivityForResult(
+          Intent(this, CreateNoteActivity::class.java)
+              .putExtra("note", note)
+              .putExtra("position", position),
+          ActivityRequestCodes.editNote
+      )
     }
   }
 
@@ -50,20 +55,19 @@ class ListNotesActivity : AppCompatActivity() {
     }
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-    val createdNote = requestCode == ActivityRequestCodes.createNote &&
-        resultCode == RESULT_OK
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    val note = data?.getParcelableExtra<Note>("note")
+    val position = data?.getIntExtra("position", 0) as Int
 
-    if (!createdNote) {
+    if (resultCode != RESULT_OK || note == null) {
       super.onActivityResult(requestCode, resultCode, data)
       return
     }
 
-    receivedNote(data.getParcelableExtra<Note>("createdNote"))
-  }
-
-  private fun receivedNote(note: Note) {
-    (recyclerView.adapter as StringArrayAdapter).addElement(note)
+    when (requestCode) {
+      ActivityRequestCodes.createNote -> adapter.addElement(note)
+      ActivityRequestCodes.editNote -> adapter.updateElement(note, position)
+    }
   }
 }
 
@@ -75,7 +79,7 @@ class StringArrayAdapter(
   val inflater by lazy { LayoutInflater.from(context) }
   val items by lazy { listNotes() }
 
-  var clickListener: ((Note) -> Unit)? = null
+  var clickListener: ((Note, Int) -> Unit)? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StringViewHolder(inflater.inflate(R.layout.adaper_row_list_notes, parent, false))
 
@@ -109,14 +113,16 @@ class StringArrayAdapter(
     return notes
   }
 
-  fun addElement(note: Note) {
-    addElement(note, 0)
-  }
-
-  fun addElement(note: Note, position: Int) {
+  fun addElement(note: Note, position: Int = 0) {
     val i = Math.min(position, items.size)
     items.add(i, note)
     notifyItemInserted(i)
+  }
+
+  fun updateElement(note: Note, position: Int = 0) {
+    val i = Math.min(position, items.size)
+    items[i] = note
+    notifyItemChanged(i)
   }
 
   inner class StringViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -127,7 +133,7 @@ class StringArrayAdapter(
     init {
       view.setOnClickListener {
         val note = items[adapterPosition]
-        clickListener?.invoke(note)
+        clickListener?.invoke(note, adapterPosition)
       }
     }
   }
