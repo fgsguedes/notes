@@ -1,11 +1,10 @@
 package br.com.hardcoded.notes.app.common.injection.module
 
-import android.content.SharedPreferences
-import br.com.hardcoded.notes.data.repository.Json
 import br.com.hardcoded.notes.data.repository.NoteRepositoryImpl
 import br.com.hardcoded.notes.domain.repository.NoteRepository
 import dagger.Module
 import dagger.Provides
+import justmakeitwork.DatabaseHelper
 import javax.inject.Singleton
 
 @Module
@@ -14,9 +13,8 @@ class RepositoryModule {
 
   @Provides
   fun provideNoteRepository(
-      sharedPreferences: SharedPreferences,
-      json: Json
+      databaseHelper: DatabaseHelper
   ): NoteRepository {
-    return NoteRepositoryImpl(sharedPreferences, json)
+    return NoteRepositoryImpl(databaseHelper)
   }
 }
