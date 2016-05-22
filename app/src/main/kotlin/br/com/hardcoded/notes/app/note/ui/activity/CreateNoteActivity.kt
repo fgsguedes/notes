@@ -9,7 +9,6 @@ import android.widget.EditText
 import br.com.hardcoded.notes.R
 import br.com.hardcoded.notes.app.common.applicationComponent
 import br.com.hardcoded.notes.app.common.returningTrue
-import br.com.hardcoded.notes.app.common.nullableStringContent
 import br.com.hardcoded.notes.app.common.ui.activity.BaseActivity
 import br.com.hardcoded.notes.app.note.injection.component.DaggerNotesComponent
 import br.com.hardcoded.notes.app.note.presenter.CreateNotePresenter

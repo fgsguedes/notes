@@ -11,10 +11,11 @@ import br.com.hardcoded.notes.domain.model.Note
 
 class NotesAdapter(
     private val context: Context,
-    private val notes: List<Note>
+    initialNotes: List<Note>
 ) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
-  val inflater by lazy { LayoutInflater.from(context) }
+  private val inflater by lazy { LayoutInflater.from(context) }
+  private val notes = initialNotes.toMutableList()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NotesViewHolder(
       inflater.inflate(R.layout.adaper_row_list_notes, parent, false)
@@ -28,6 +29,12 @@ class NotesAdapter(
   }
 
   override fun getItemCount() = notes.size
+
+  fun includeInView(note: Note, position: Int = 0) {
+    val index = Math.min(position, notes.size)
+    notes.add(index, note)
+    notifyItemInserted(index)
+  }
 
   inner class NotesViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     val textViewNoteTitle by lazy { view.findViewById(R.id.adapter_row_list_notes_title) as TextView }

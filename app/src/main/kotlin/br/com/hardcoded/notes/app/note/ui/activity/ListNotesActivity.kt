@@ -16,7 +16,6 @@ import br.com.hardcoded.notes.app.note.ui.adapter.NotesAdapter
 import br.com.hardcoded.notes.app.note.view.ListNotesView
 import br.com.hardcoded.notes.domain.model.Note
 import justmakeitwork.ActivityRequestCodes
-import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
 class ListNotesActivity : BaseActivity(), ListNotesView {
@@ -33,6 +32,8 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
   val floatingActionButton by lazy { findViewById(R.id.fab) as FloatingActionButton }
   val toolbar by lazy { findViewById(R.id.toolbar) as Toolbar }
 
+  lateinit var notesAdapter: NotesAdapter
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_list_notes)
@@ -45,6 +46,19 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
   override fun onSaveInstanceState(outState: Bundle) {
     outState.putParcelable(KEY_RECYCLER_VIEW_STATE, recyclerNotesList.layoutManager.onSaveInstanceState())
     super.onSaveInstanceState(outState)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    val note = data?.getParcelableExtra<Note>("note")
+
+    if (resultCode != RESULT_OK || note == null) {
+      super.onActivityResult(requestCode, resultCode, data)
+      return
+    }
+
+    when (requestCode) {
+      ActivityRequestCodes.createNote -> presenter.noteCreated(note)
+    }
   }
 
   private fun initInjector() {
@@ -67,11 +81,16 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
   }
 
   override fun showNotes(notes: List<Note>) {
-    recyclerNotesList.adapter = NotesAdapter(this, notes)
+    notesAdapter = NotesAdapter(this, notes)
+    recyclerNotesList.adapter = notesAdapter
   }
 
   override fun openCreateNoteForm() = startActivityForResult(
       Intent(this, CreateNoteActivity::class.java), ActivityRequestCodes.createNote)
+
+  override fun includeInView(note: Note) {
+    notesAdapter.includeInView(note)
+  }
 
   companion object {
     val KEY_RECYCLER_VIEW_STATE = "recyclerViewState"

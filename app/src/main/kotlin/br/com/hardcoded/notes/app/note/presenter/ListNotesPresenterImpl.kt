@@ -3,6 +3,7 @@ package br.com.hardcoded.notes.app.note.presenter
 import android.os.Bundle
 import android.util.Log
 import br.com.hardcoded.notes.app.note.view.ListNotesView
+import br.com.hardcoded.notes.domain.model.Note
 import br.com.hardcoded.notes.domain.usecase.GetNoteListUseCase
 import rx.observers.Subscribers
 
@@ -16,10 +17,6 @@ class ListNotesPresenterImpl(
     this.view = view
   }
 
-  override fun onCreateNoteClicked() {
-    view.openCreateNoteForm()
-  }
-
   override fun onCreate(savedState: Bundle?, intentExtras: Bundle?) {
     getNoteListUseCase.subscribe(Subscribers.create(
         { notes -> view.showNotes(notes) },
@@ -28,6 +25,14 @@ class ListNotesPresenterImpl(
   }
 
   override fun onSaveInstanceState(outState: Bundle?) {
+  }
+
+  override fun onCreateNoteClicked() {
+    view.openCreateNoteForm()
+  }
+
+  override fun noteCreated(note: Note) {
+    view.includeInView(note)
   }
 
   companion object {
