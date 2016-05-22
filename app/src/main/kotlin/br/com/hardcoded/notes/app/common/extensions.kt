@@ -10,14 +10,6 @@ val Application.applicationComponent: ApplicationComponent
   get() = (this as App).applicationComponent
 
 
-val EditText.nullableStringContent: String?
-  get() = text.toString().let {
-    when {
-      it.isNotBlank() -> it.trim()
-      else -> null
-    }
-  }
-
 // To be used with view-click in conjunction with single-line `when` clauses
 fun AppCompatActivity.returningTrue(f: () -> Unit): Boolean {
   f()

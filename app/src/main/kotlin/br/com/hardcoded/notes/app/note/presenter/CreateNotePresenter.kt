@@ -38,7 +38,7 @@ class CreateNotePresenterImpl(
 
   override fun validForm(title: String, content: String?) {
     createNoteUseCase.subscribe(title, content, Subscribers.create(
-        { note -> error(note) },
+        { note -> view.noteCreated(note) },
         { error -> },
         { error("Note created!") }
     ))

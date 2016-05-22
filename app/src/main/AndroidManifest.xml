@@ -19,7 +19,7 @@
     </activity>
 
     <activity
-        android:name="justmakeitwork.CreateNoteActivity"
+        android:name=".app.note.ui.activity.CreateNoteActivity"
         android:label="@string/activity_label_new_note"
         android:parentActivityName="justmakeitwork.ListNotesActivity"/>
 

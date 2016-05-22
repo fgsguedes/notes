@@ -1,5 +1,6 @@
 package br.com.hardcoded.notes.app.note.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -13,6 +14,7 @@ import br.com.hardcoded.notes.app.common.ui.activity.BaseActivity
 import br.com.hardcoded.notes.app.note.injection.component.DaggerNotesComponent
 import br.com.hardcoded.notes.app.note.presenter.CreateNotePresenter
 import br.com.hardcoded.notes.app.note.view.CreateNoteView
+import br.com.hardcoded.notes.domain.model.Note
 import org.jetbrains.anko.AnkoLogger
 import javax.inject.Inject
 
@@ -69,12 +71,20 @@ class CreateNoteActivity : BaseActivity(), CreateNoteView, AnkoLogger {
   }
 
   override fun validateForm() {
-    val title = editTextNoteTitle.nullableStringContent
-    val content = editTextNoteContent.nullableStringContent
+    val title = editTextNoteTitle.text.toString()
+    val content = editTextNoteContent.text.toString()
 
     when {
-      title != null -> presenter.validForm(title, content)
+      title.isNotBlank() && content.isNotBlank() -> presenter.validForm(title, content)
       else -> presenter.invalidForm()
     }
+  }
+
+  override fun noteCreated(note: Note) {
+    val intent = Intent()
+        .putExtra("note", note)
+
+    setResult(RESULT_OK, intent)
+    finish()
   }
 }

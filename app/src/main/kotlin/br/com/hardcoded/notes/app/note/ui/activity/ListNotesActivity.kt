@@ -1,5 +1,6 @@
 package br.com.hardcoded.notes.app.note.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.design.widget.FloatingActionButton
@@ -14,6 +15,7 @@ import br.com.hardcoded.notes.app.note.presenter.ListNotesPresenter
 import br.com.hardcoded.notes.app.note.ui.adapter.NotesAdapter
 import br.com.hardcoded.notes.app.note.view.ListNotesView
 import br.com.hardcoded.notes.domain.model.Note
+import justmakeitwork.ActivityRequestCodes
 import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
@@ -68,7 +70,8 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     recyclerNotesList.adapter = NotesAdapter(this, notes)
   }
 
-  override fun openCreateNoteForm() = startActivity<CreateNoteActivity>()
+  override fun openCreateNoteForm() = startActivityForResult(
+      Intent(this, CreateNoteActivity::class.java), ActivityRequestCodes.createNote)
 
   companion object {
     val KEY_RECYCLER_VIEW_STATE = "recyclerViewState"
