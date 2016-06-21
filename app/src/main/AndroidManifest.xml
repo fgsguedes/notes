@@ -1,5 +1,6 @@
-<manifest package="br.com.hardcoded.notes"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.fgsguedes.notes"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
   <application
       android:name=".app.App"

@@ -6,7 +6,7 @@ android {
   buildToolsVersion "24.0.0"
 
   defaultConfig {
-    applicationId "br.com.hardcoded.notes"
+    applicationId "com.fgsguedes.notes"
     minSdkVersion 16
     targetSdkVersion 24
     versionCode 1
