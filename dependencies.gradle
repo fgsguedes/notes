@@ -7,24 +7,23 @@ allprojects {
 
 ext {
   //Gradle
-  gradleBuildToolsVersion = "2.1.0"
+  gradleBuildToolsVersion = "2.1.2"
 
   // Kotlin
-  kotlinVersion = "1.0.1-2"
-  ankoVersion = "0.8.3"
+  kotlinVersion = "1.0.2-1"
+  ankoVersion = "0.9"
 
   // Java
   javaxAnnotationVersion = "1.0"
 
   // Rx
-  rxJavaVersion = "1.1.1"
+  rxJavaVersion = "1.1.5"
 
   // Google
-  daggerVersion = "2.0.2"
-  gsonVersion = "2.6.2"
+  daggerVersion = "2.5"
 
   // Android
-  supportLibraryVersion = "23.2.1"
+  supportLibraryVersion = "24.0.0"
 
   appDependencies = [
       kotlin               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
@@ -35,7 +34,6 @@ ext {
       dagger               : "com.google.dagger:dagger:$daggerVersion",
       daggerCompiler       : "com.google.dagger:dagger-compiler:$daggerVersion",
       designSupportLibrary : "com.android.support:design:$supportLibraryVersion",
-      supportVectorDrawable: "com.android.support:support-vector-drawable:$supportLibraryVersion",
-      gson           : "com.google.code.gson:gson:$gsonVersion"
+      supportVectorDrawable: "com.android.support:support-vector-drawable:$supportLibraryVersion"
   ]
 }
