@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import br.com.hardcoded.notes.R
+import com.fgsguedes.notes.R
 import com.fgsguedes.notes.domain.model.Note
 
 class NotesAdapter(

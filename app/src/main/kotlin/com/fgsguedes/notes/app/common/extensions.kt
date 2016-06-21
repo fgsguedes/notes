@@ -1,13 +1,12 @@
 package com.fgsguedes.notes.app.common
 
-import android.app.Application
 import android.support.v7.app.AppCompatActivity
 import android.widget.EditText
 import com.fgsguedes.notes.app.App
 import com.fgsguedes.notes.app.common.injection.component.ApplicationComponent
 
-val Application.applicationComponent: ApplicationComponent
-  get() = (this as App).applicationComponent
+val AppCompatActivity.applicationComponent: ApplicationComponent
+  get() = (application as App).applicationComponent
 
 
 val EditText.nullableStringContent: String?

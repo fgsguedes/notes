@@ -7,12 +7,11 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
-import br.com.hardcoded.notes.R
+import com.fgsguedes.notes.R
 import com.fgsguedes.notes.app.common.applicationComponent
 import com.fgsguedes.notes.app.common.execute
 import com.fgsguedes.notes.app.common.nullableStringContent
 import com.fgsguedes.notes.app.common.ui.activity.BaseActivity
-import com.fgsguedes.notes.app.note.injection.component.DaggerNotesComponent
 import com.fgsguedes.notes.app.note.presenter.CreateNotePresenter
 import com.fgsguedes.notes.app.note.view.CreateNoteView
 import com.fgsguedes.notes.domain.model.Note
@@ -28,17 +27,11 @@ class CreateNoteActivity : BaseActivity(), CreateNoteView {
   @Inject
   lateinit var presenter: CreateNotePresenter
 
-  val component by lazy {
-    DaggerNotesComponent.builder()
-        .applicationComponent(application.applicationComponent)
-        .build()
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_create_note)
 
-    component.inject(this)
+    applicationComponent.inject(this)
     initUi(savedInstanceState)
     initPresenter(savedInstanceState)
   }

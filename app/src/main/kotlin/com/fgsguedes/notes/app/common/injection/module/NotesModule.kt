@@ -1,6 +1,5 @@
-package com.fgsguedes.notes.app.note.injection.module
+package com.fgsguedes.notes.app.common.injection.module
 
-import com.fgsguedes.notes.app.common.injection.PerActivity
 import com.fgsguedes.notes.app.note.presenter.CreateNotePresenter
 import com.fgsguedes.notes.app.note.presenter.CreateNotePresenterImpl
 import com.fgsguedes.notes.app.note.presenter.ListNotesPresenter
@@ -10,9 +9,10 @@ import com.fgsguedes.notes.domain.usecase.CreateNoteUseCase
 import com.fgsguedes.notes.domain.usecase.GetNoteListUseCase
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
-@PerActivity
+@Singleton
 class NotesModule {
 
   @Provides

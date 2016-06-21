@@ -6,10 +6,9 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import br.com.hardcoded.notes.R
+import com.fgsguedes.notes.R
 import com.fgsguedes.notes.app.common.applicationComponent
 import com.fgsguedes.notes.app.common.ui.activity.BaseActivity
-import com.fgsguedes.notes.app.note.injection.component.DaggerNotesComponent
 import com.fgsguedes.notes.app.note.presenter.ListNotesPresenter
 import com.fgsguedes.notes.app.note.ui.adapter.NotesAdapter
 import com.fgsguedes.notes.app.note.view.ListNotesView
@@ -18,12 +17,6 @@ import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
 class ListNotesActivity : BaseActivity(), ListNotesView {
-
-  val component by lazy {
-    DaggerNotesComponent.builder()
-        .applicationComponent(application.applicationComponent)
-        .build()
-  }
 
   @Inject lateinit var presenter: ListNotesPresenter
 
@@ -35,7 +28,7 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_list_notes)
 
-    initInjector()
+    applicationComponent.inject(this)
     initUi(savedInstanceState)
     initActivity(savedInstanceState)
   }
@@ -43,10 +36,6 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
   override fun onSaveInstanceState(outState: Bundle) {
     outState.putParcelable(KEY_RECYCLER_VIEW_STATE, recyclerNotesList.layoutManager.onSaveInstanceState())
     super.onSaveInstanceState(outState)
-  }
-
-  private fun initInjector() {
-    component.inject(this)
   }
 
   private fun initUi(savedInstanceState: Bundle?) {
