@@ -15,6 +15,13 @@ android {
     vectorDrawables.useSupportLibrary = true
   }
 
+  signingConfigs {
+
+    debug {
+      storeFile = file('../debug.keystore')
+    }
+  }
+
   buildTypes {
 
     release {
