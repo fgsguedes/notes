@@ -8,9 +8,9 @@ import javax.inject.Singleton
 @Singleton
 class GetNoteListUseCase(
     private val noteRepository: NoteRepository
-) : UseCase<List<Note>>() {
+) : UseCase<Note>() {
 
-  fun subscribe(subscriber: Subscriber<List<Note>>) {
+  fun subscribe(subscriber: Subscriber<Note>) {
     internalSubscribe(subscriber)
   }
 

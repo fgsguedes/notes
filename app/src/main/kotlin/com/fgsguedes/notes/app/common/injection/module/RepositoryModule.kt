@@ -1,17 +1,21 @@
 package com.fgsguedes.notes.app.common.injection.module
 
-import com.fgsguedes.notes.domain.repository.NoteRepositoryImpl
 import com.fgsguedes.notes.domain.repository.NoteRepository
+import com.fgsguedes.notes.domain.repository.NoteRepositoryImpl
+import com.google.firebase.database.DatabaseReference
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-@Singleton
 class RepositoryModule {
 
   @Provides
-  fun provideNoteRepository(): NoteRepository {
-    return NoteRepositoryImpl()
+  @Singleton
+  fun provideNoteRepository(
+      @Named("notes") databaseReference: DatabaseReference
+  ): NoteRepository {
+    return NoteRepositoryImpl(databaseReference)
   }
 }

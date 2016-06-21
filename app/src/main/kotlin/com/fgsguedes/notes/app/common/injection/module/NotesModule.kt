@@ -12,10 +12,10 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-@Singleton
 class NotesModule {
 
   @Provides
+  @Singleton
   fun provideListNotesPresenter(
       getNoteListUseCase: GetNoteListUseCase
   ): ListNotesPresenter {
@@ -23,6 +23,7 @@ class NotesModule {
   }
 
   @Provides
+  @Singleton
   fun provideCreateNotePresenter(
       createNoteUseCase: CreateNoteUseCase
   ): CreateNotePresenter {
@@ -30,8 +31,10 @@ class NotesModule {
   }
 
   @Provides
+  @Singleton
   fun provideListNotesUseCase(noteRepository: NoteRepository) = GetNoteListUseCase(noteRepository)
 
   @Provides
+  @Singleton
   fun providePutNoteUseCase(noteRepository: NoteRepository) = CreateNoteUseCase(noteRepository)
 }

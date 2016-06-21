@@ -75,5 +75,6 @@ class CreateNoteActivity : BaseActivity(), CreateNoteView {
 
   override fun noteCreated(note: Note) {
     setResult(Activity.RESULT_OK, Intent().putExtra("note", note))
+    finish()
   }
 }

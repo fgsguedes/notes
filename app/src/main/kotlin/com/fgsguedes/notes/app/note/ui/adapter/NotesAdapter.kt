@@ -8,11 +8,11 @@ import com.fgsguedes.notes.R
 import com.fgsguedes.notes.domain.model.Note
 
 class NotesAdapter(
-    private val context: Context,
-    private val notes: List<Note>
+    private val context: Context
 ) : RecyclerView.Adapter<NotesViewHolder>() {
 
   val inflater by lazy { LayoutInflater.from(context) }
+  val notes = mutableListOf<Note>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NotesViewHolder(
       inflater.inflate(R.layout.adaper_row_list_notes, parent, false)
@@ -25,4 +25,10 @@ class NotesAdapter(
   }
 
   override fun getItemCount() = notes.size
+
+  fun addItem(note: Note) {
+    val notePosition = notes.size
+    notes.add(note)
+    notifyItemInserted(notePosition)
+  }
 }

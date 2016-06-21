@@ -22,7 +22,7 @@ class ListNotesPresenterImpl(
 
   override fun onCreate(savedState: Bundle?, intentExtras: Bundle?) {
     getNoteListUseCase.subscribe(Subscribers.create(
-        { notes -> view.showNotes(notes) },
+        { note -> view.showNote(note) },
         { error -> Log.e(TAG, "Unable do get notes", error) }
     ))
   }

@@ -5,15 +5,15 @@ import android.os.Parcelable
 import java.util.*
 
 data class Note(
-    val id: Long,
     val title: String,
     val content: String? = null,
     val label: Label? = null,
     val remindOn: Date? = null
 ) : Parcelable {
 
+  private constructor() : this("", "") // For Firebase
+
   constructor(source: Parcel) : this(
-      source.readLong(),
       source.readString(),
       source.readString(),
       source.readParcelable(Label::class.java.classLoader),
@@ -27,7 +27,6 @@ data class Note(
 
   override fun writeToParcel(dest: Parcel, flags: Int) {
     dest.apply {
-      writeLong(id)
       writeString(title)
       writeString(content)
       writeParcelable(label, 0)
