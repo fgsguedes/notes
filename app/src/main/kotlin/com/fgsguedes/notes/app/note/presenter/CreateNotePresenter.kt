@@ -5,8 +5,7 @@ import android.util.Log
 import com.fgsguedes.notes.app.common.TAG
 import com.fgsguedes.notes.app.common.presenter.Presenter
 import com.fgsguedes.notes.app.note.view.CreateNoteView
-import com.fgsguedes.notes.domain.usecase.CreateNoteUseCase
-import rx.observers.Subscribers
+import com.fgsguedes.notes.domain.repository.NoteRepository
 
 interface CreateNotePresenter : Presenter<CreateNoteView> {
   fun doneClicked()
@@ -16,7 +15,7 @@ interface CreateNotePresenter : Presenter<CreateNoteView> {
 }
 
 class CreateNotePresenterImpl(
-    private val createNoteUseCase: CreateNoteUseCase
+    private val noteRepository: NoteRepository
 ) : CreateNotePresenter {
 
   private lateinit var view: CreateNoteView
@@ -38,11 +37,11 @@ class CreateNotePresenterImpl(
   }
 
   override fun validForm(title: String, content: String?) {
-    createNoteUseCase.subscribe(title, content, Subscribers.create(
+    noteRepository.create(title, content).subscribe(
         { note -> view.noteCreated(note) },
         { error -> Log.e(TAG, "Unable to create note", error) },
         { Log.i(TAG, "Note created!") }
-    ))
+    )
   }
 
   override fun invalidForm() = TODO()

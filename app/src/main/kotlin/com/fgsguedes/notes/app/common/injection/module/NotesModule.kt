@@ -5,8 +5,6 @@ import com.fgsguedes.notes.app.note.presenter.CreateNotePresenterImpl
 import com.fgsguedes.notes.app.note.presenter.ListNotesPresenter
 import com.fgsguedes.notes.app.note.presenter.ListNotesPresenterImpl
 import com.fgsguedes.notes.domain.repository.NoteRepository
-import com.fgsguedes.notes.domain.usecase.CreateNoteUseCase
-import com.fgsguedes.notes.domain.usecase.GetNoteListUseCase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -17,24 +15,16 @@ class NotesModule {
   @Provides
   @Singleton
   fun provideListNotesPresenter(
-      getNoteListUseCase: GetNoteListUseCase
+      notesRepository: NoteRepository
   ): ListNotesPresenter {
-    return ListNotesPresenterImpl(getNoteListUseCase)
+    return ListNotesPresenterImpl(notesRepository)
   }
 
   @Provides
   @Singleton
   fun provideCreateNotePresenter(
-      createNoteUseCase: CreateNoteUseCase
+      notesRepository: NoteRepository
   ): CreateNotePresenter {
-    return CreateNotePresenterImpl(createNoteUseCase)
+    return CreateNotePresenterImpl(notesRepository)
   }
-
-  @Provides
-  @Singleton
-  fun provideListNotesUseCase(noteRepository: NoteRepository) = GetNoteListUseCase(noteRepository)
-
-  @Provides
-  @Singleton
-  fun providePutNoteUseCase(noteRepository: NoteRepository) = CreateNoteUseCase(noteRepository)
 }

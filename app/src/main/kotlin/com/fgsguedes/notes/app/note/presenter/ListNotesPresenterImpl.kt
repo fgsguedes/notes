@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import com.fgsguedes.notes.app.note.view.ListNotesView
 import com.fgsguedes.notes.domain.model.Note
-import com.fgsguedes.notes.domain.usecase.GetNoteListUseCase
-import rx.observers.Subscribers
+import com.fgsguedes.notes.domain.repository.NoteRepository
 
 class ListNotesPresenterImpl(
-    private val getNoteListUseCase: GetNoteListUseCase
+    private val notesRepository: NoteRepository
 ) : ListNotesPresenter {
 
   private lateinit var view: ListNotesView
@@ -18,10 +17,11 @@ class ListNotesPresenterImpl(
   }
 
   override fun onCreate(savedState: Bundle?, intentExtras: Bundle?) {
-    getNoteListUseCase.subscribe(Subscribers.create(
-        { note -> view.showNote(note) },
-        { error -> Log.e(TAG, "Unable do get notes", error) }
-    ))
+    notesRepository.list()
+        .subscribe(
+            { note -> view.showNote(note) },
+            { error -> Log.e(TAG, "Unable do get notes", error) }
+        )
   }
 
   override fun onSaveInstanceState(outState: Bundle?) {
