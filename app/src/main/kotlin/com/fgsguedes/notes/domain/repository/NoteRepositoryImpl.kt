@@ -11,32 +11,32 @@ class NoteRepositoryImpl(
     val databaseReference: DatabaseReference
 ) : NoteRepository {
 
-  override fun list(): Observable<Note> {
-    return Observable.create { subscriber ->
-      databaseReference
-          .addListenerForSingleValueEvent(object : ValueEventListener {
+  override fun list() = Observable.create<Note> { subscriber ->
+    databaseReference
+        .addListenerForSingleValueEvent(object : ValueEventListener {
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-              snapshot.children
-                  .map { it.getValue(Note::class.java) }
-                  .forEach { subscriber.onNext(it) }
+          override fun onDataChange(snapshot: DataSnapshot) {
+            snapshot.children
+                .map { it.getValue(Note::class.java) }
+                .forEach { subscriber.onNext(it) }
 
-              subscriber.onCompleted()
-            }
+            subscriber.onCompleted()
+          }
 
-            override fun onCancelled(error: DatabaseError) {
-              subscriber.onError(error.toException())
-            }
-          })
-    }
+          override fun onCancelled(error: DatabaseError) {
+            subscriber.onError(error.toException())
+          }
+        })
   }
 
-  override fun create(title: String, content: String?): Observable<Note> {
-    return Observable.fromCallable {
+  override fun create(
+      title: String,
+      content: String?
+  ) = Observable.fromCallable {
+
       Note(title, content).apply {
         val key = databaseReference.push().key
         databaseReference.child(key).setValue(this)
       }
     }
-  }
 }
