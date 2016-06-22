@@ -13,7 +13,6 @@ class NoteRepositoryImpl(
 
   override fun list(): Observable<Note> {
     return Observable.create { subscriber ->
-
       databaseReference
           .addListenerForSingleValueEvent(object : ValueEventListener {
 

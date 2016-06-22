@@ -9,8 +9,7 @@ import android.view.MenuItem
 import android.widget.EditText
 import com.fgsguedes.notes.R
 import com.fgsguedes.notes.app.common.applicationComponent
-import com.fgsguedes.notes.app.common.execute
-import com.fgsguedes.notes.app.common.nullableStringContent
+import com.fgsguedes.notes.app.common.returningTrue
 import com.fgsguedes.notes.app.common.ui.activity.BaseActivity
 import com.fgsguedes.notes.app.note.presenter.CreateNotePresenter
 import com.fgsguedes.notes.app.note.view.CreateNoteView
@@ -50,13 +49,13 @@ class CreateNoteActivity : BaseActivity(), CreateNoteView {
     presenter.onCreate(savedInstanceState, intent.extras)
   }
 
-  override fun onCreateOptionsMenu(menu: Menu) = execute {
+  override fun onCreateOptionsMenu(menu: Menu) = returningTrue {
     menuInflater.inflate(R.menu.menu_activity_create_note, menu)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
-      R.id.menu_item_done_creating_note -> execute {
+      R.id.menu_item_done_creating_note -> returningTrue {
         presenter.doneClicked()
       }
       else -> false
@@ -64,11 +63,11 @@ class CreateNoteActivity : BaseActivity(), CreateNoteView {
   }
 
   override fun validateForm() {
-    val title = editTextNoteTitle.nullableStringContent
-    val content = editTextNoteContent.nullableStringContent
+    val title = editTextNoteTitle.text.toString()
+    val content = editTextNoteContent.text.toString()
 
     when {
-      title != null -> presenter.validForm(title, content)
+      title.isNotBlank() && content.isNotBlank() -> presenter.validForm(title, content)
       else -> presenter.invalidForm()
     }
   }

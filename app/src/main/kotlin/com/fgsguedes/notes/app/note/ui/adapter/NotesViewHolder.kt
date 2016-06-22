@@ -7,4 +7,5 @@ import com.fgsguedes.notes.R
 
 class NotesViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
   val textViewNoteTitle by lazy { view.findViewById(R.id.adapter_row_list_notes_title) as TextView }
+  val textViewNoteContent by lazy { view.findViewById(R.id.adapter_row_list_notes_content) as TextView }
 }

@@ -29,7 +29,6 @@ ext {
 
   appDependencies = [
       kotlin               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
-      kotlinReflect        : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
       anko                 : "org.jetbrains.anko:anko-sdk15:$ankoVersion",
       javaxAnnotation      : "javax.annotation:jsr250-api:$javaxAnnotationVersion",
       rxJava               : "io.reactivex:rxjava:$rxJavaVersion",

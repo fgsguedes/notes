@@ -61,14 +61,21 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     adapter.addItem(note)
   }
 
-  override fun openCreateNoteForm() = startActivityForResult(intentFor<CreateNoteActivity>(), 1)
+  override fun openCreateNoteForm() = startActivityForResult(
+      intentFor<CreateNoteActivity>(),
+      ActivityRequestCodes.createNote
+  )
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    val note = data?.getParcelableExtra<Note>("note")
+
+    if (resultCode != RESULT_OK || note == null) {
+      super.onActivityResult(requestCode, resultCode, data)
+      return
+    }
 
     when (requestCode) {
-      1 -> data?.getParcelableExtra<Note>("note")?.let { note ->
-        adapter.addItem(note)
-      }
+      ActivityRequestCodes.createNote -> presenter.noteCreated(note)
     }
   }
 
