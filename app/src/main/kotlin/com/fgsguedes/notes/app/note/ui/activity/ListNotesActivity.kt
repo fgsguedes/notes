@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import com.fgsguedes.notes.R
 import com.fgsguedes.notes.app.common.applicationComponent
+import com.fgsguedes.notes.app.common.ui.activity.ActivityRequestCodes
 import com.fgsguedes.notes.app.common.ui.activity.BaseActivity
 import com.fgsguedes.notes.app.note.presenter.ListNotesPresenter
 import com.fgsguedes.notes.app.note.ui.adapter.NotesAdapter
