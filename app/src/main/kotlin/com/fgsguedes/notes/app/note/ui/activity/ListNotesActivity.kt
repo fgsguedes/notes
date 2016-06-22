@@ -34,7 +34,7 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
 
     applicationComponent.inject(this)
     initUi(savedInstanceState)
-    initActivity(savedInstanceState)
+    initPresenter(savedInstanceState)
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
@@ -53,7 +53,7 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     recyclerNotesList.adapter = adapter
   }
 
-  private fun initActivity(savedInstanceState: Bundle?) {
+  private fun initPresenter(savedInstanceState: Bundle?) {
     presenter.bindView(this)
     presenter.onCreate(savedInstanceState, intent.extras)
   }
