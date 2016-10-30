@@ -7,31 +7,31 @@ allprojects {
 
 ext {
   //Gradle
-  gradleBuildToolsVersion = "2.1.2"
+  gradleBuildToolsVersion = "2.2.2"
 
   // Kotlin
-  kotlinVersion = "1.0.2-1"
+  kotlinVersion = "1.0.4"
   ankoVersion = "0.9"
 
   // Java
   javaxAnnotationVersion = "1.0"
 
   // Rx
-  rxJavaVersion = "1.1.5"
+  rxJavaVersion = "2.0.0"
 
   // Google
   googleServicesVersion = "3.0.0"
-  playServicesVersion = "9.0.2"
-  daggerVersion = "2.5"
+  playServicesVersion = "9.8.0"
+  daggerVersion = "2.7"
 
   // Android
-  supportLibraryVersion = "24.0.0"
+  supportLibraryVersion = "25.0.0"
 
   appDependencies = [
       kotlin               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
       anko                 : "org.jetbrains.anko:anko-sdk15:$ankoVersion",
       javaxAnnotation      : "javax.annotation:jsr250-api:$javaxAnnotationVersion",
-      rxJava               : "io.reactivex:rxjava:$rxJavaVersion",
+      rxJava               : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
       dagger               : "com.google.dagger:dagger:$daggerVersion",
       daggerCompiler       : "com.google.dagger:dagger-compiler:$daggerVersion",
       designSupportLibrary : "com.android.support:design:$supportLibraryVersion",

@@ -2,6 +2,7 @@ package com.fgsguedes.notes.app.note.presenter
 
 import android.os.Bundle
 import android.util.Log
+import com.fgsguedes.notes.app.common.TAG
 import com.fgsguedes.notes.app.note.view.ListNotesView
 import com.fgsguedes.notes.domain.model.Note
 import com.fgsguedes.notes.domain.repository.NoteRepository
@@ -33,9 +34,5 @@ class ListNotesPresenterImpl(
 
   override fun noteCreated(note: Note) {
     view.showNote(note)
-  }
-
-  companion object {
-    val TAG = ListNotesPresenterImpl::class.java.simpleName
   }
 }

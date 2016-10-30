@@ -39,8 +39,7 @@ class CreateNotePresenterImpl(
   override fun validForm(title: String, content: String?) {
     noteRepository.create(title, content).subscribe(
         { note -> view.noteCreated(note) },
-        { error -> Log.e(TAG, "Unable to create note", error) },
-        { Log.i(TAG, "Note created!") }
+        { error -> Log.e(TAG, "Unable to create note", error) }
     )
   }
 

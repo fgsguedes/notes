@@ -5,26 +5,27 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import rx.Observable
+import io.reactivex.Observable
+import io.reactivex.Single
 
 class NoteRepositoryImpl(
     val databaseReference: DatabaseReference
 ) : NoteRepository {
 
-  override fun list() = Observable.create<Note> { subscriber ->
+  override fun list(): Observable<Note> = Observable.create<Note> { emitter ->
     databaseReference
         .addListenerForSingleValueEvent(object : ValueEventListener {
 
           override fun onDataChange(snapshot: DataSnapshot) {
             snapshot.children
                 .map { it.getValue(Note::class.java) }
-                .forEach { subscriber.onNext(it) }
+                .forEach { emitter.onNext(it) }
 
-            subscriber.onCompleted()
+            emitter.onComplete()
           }
 
           override fun onCancelled(error: DatabaseError) {
-            subscriber.onError(error.toException())
+            emitter.onError(error.toException())
           }
         })
   }
@@ -32,11 +33,10 @@ class NoteRepositoryImpl(
   override fun create(
       title: String,
       content: String?
-  ) = Observable.fromCallable {
-
-      Note(title, content).apply {
-        val key = databaseReference.push().key
-        databaseReference.child(key).setValue(this)
-      }
+  ): Single<Note> = Single.fromCallable {
+    Note(title, content).apply {
+      val key = databaseReference.push().key
+      databaseReference.child(key).setValue(this)
     }
+  }
 }
