@@ -7,25 +7,25 @@ allprojects {
 
 ext {
   //Gradle
-  gradleBuildToolsVersion = "2.2.2"
+  gradleBuildToolsVersion = "2.2.3"
 
   // Kotlin
-  kotlinVersion = "1.0.4"
+  kotlinVersion = "1.0.5-3"
   ankoVersion = "0.9"
 
   // Java
   javaxAnnotationVersion = "1.0"
 
   // Rx
-  rxJavaVersion = "2.0.0"
+  rxJavaVersion = "2.0.3"
 
   // Google
   googleServicesVersion = "3.0.0"
   playServicesVersion = "9.8.0"
-  daggerVersion = "2.7"
+  daggerVersion = "2.8"
 
   // Android
-  supportLibraryVersion = "25.0.0"
+  supportLibraryVersion = "25.1.0"
 
   appDependencies = [
       kotlin               : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
