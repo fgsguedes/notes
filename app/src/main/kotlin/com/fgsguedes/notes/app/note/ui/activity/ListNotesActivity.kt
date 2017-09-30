@@ -26,7 +26,7 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
   val floatingActionButton by lazy { findViewById(R.id.fab) as FloatingActionButton }
   val toolbar by lazy { findViewById(R.id.toolbar) as Toolbar }
 
-  val adapter = NotesAdapter(this)
+  private val adapter = NotesAdapter(this)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
