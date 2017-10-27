@@ -13,11 +13,11 @@ class FirebaseModule {
 
   @Provides
   @Singleton
-  fun provideFirebaseAuth() = FirebaseAuth.getInstance()
+  fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
   @Provides
   @Singleton
-  fun provideFirebaseDatabase() = FirebaseDatabase.getInstance().apply {
+  fun provideFirebaseDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance().apply {
     setPersistenceEnabled(true)
   }
 
@@ -26,7 +26,5 @@ class FirebaseModule {
   @Named("notes")
   fun provideNoteDatabaseReference(
       firebaseDatabase: FirebaseDatabase
-  ): DatabaseReference {
-    return firebaseDatabase.getReference("notes")
-  }
+  ): DatabaseReference = firebaseDatabase.getReference("notes")
 }

@@ -1,14 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-  compileSdkVersion 26
-  buildToolsVersion "26.0.1"
+  compileSdkVersion 27
+  buildToolsVersion "27.0.0"
 
   defaultConfig {
     applicationId "com.fgsguedes.notes"
     minSdkVersion 16
-    targetSdkVersion 26
+    targetSdkVersion 27
     versionCode 1
     versionName "1.0"
 
@@ -52,26 +54,32 @@ android {
 }
 
 kapt {
-  generateStubs = true
+  correctErrorTypes = true
+}
+
+androidExtensions {
+  experimental = true
 }
 
 dependencies {
-  def appDependencies = rootProject.ext.appDependencies
 
-  kapt appDependencies.daggerCompiler
-  provided appDependencies.javaxAnnotation
+  kapt "com.google.dagger:dagger-compiler:2.11"
+  compileOnly "javax.annotation:jsr250-api:1.0"
 
-  compile appDependencies.kotlin
-  compile appDependencies.anko
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:1.1.51"
+  implementation "org.jetbrains.anko:anko-sdk15:0.10.1"
 
-  compile appDependencies.rxJava
-  compile appDependencies.dagger
+  implementation "com.android.support:design:27.0.0"
+  implementation "com.android.support:support-vector-drawable:27.0.0"
 
-  compile appDependencies.designSupportLibrary
-  compile appDependencies.supportVectorDrawable
+  implementation "com.google.firebase:firebase-database:11.4.2"
+  implementation "com.google.firebase:firebase-auth:11.4.2"
 
-  compile appDependencies.firebaseAuth
-  compile appDependencies.firebaseDatabase
+  implementation "com.google.dagger:dagger:2.11"
+
+  implementation "io.reactivex.rxjava2:rxjava:2.1.3"
+
+  implementation 'com.jakewharton.timber:timber:4.5.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

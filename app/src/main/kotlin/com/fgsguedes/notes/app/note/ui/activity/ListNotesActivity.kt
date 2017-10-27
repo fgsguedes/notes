@@ -22,9 +22,9 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
 
   @Inject lateinit var presenter: ListNotesPresenter
 
-  val recyclerNotesList by lazy { findViewById(R.id.recycler_notes_list) as RecyclerView }
-  val floatingActionButton by lazy { findViewById(R.id.fab) as FloatingActionButton }
-  val toolbar by lazy { findViewById(R.id.toolbar) as Toolbar }
+  private val recyclerNotesList by lazy { findViewById<RecyclerView>(R.id.recycler_notes_list) }
+  private val floatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.fab) }
+  private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
 
   private val adapter = NotesAdapter(this)
 

@@ -5,6 +5,6 @@ import com.fgsguedes.notes.app.note.view.ListNotesView
 import com.fgsguedes.notes.domain.model.Note
 
 interface ListNotesPresenter : Presenter<ListNotesView> {
-  fun onCreateNoteClicked(): Unit
+  fun onCreateNoteClicked()
   fun noteCreated(note: Note)
 }

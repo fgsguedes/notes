@@ -5,7 +5,9 @@ import android.view.View
 import android.widget.TextView
 import com.fgsguedes.notes.R
 
-class NotesViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-  val textViewNoteTitle by lazy { view.findViewById(R.id.adapter_row_list_notes_title) as TextView }
-  val textViewNoteContent by lazy { view.findViewById(R.id.adapter_row_list_notes_content) as TextView }
+class NotesViewHolder(
+    private val view: View
+) : RecyclerView.ViewHolder(view) {
+  val textViewNoteTitle: TextView by lazy { view.findViewById<TextView>(R.id.adapter_row_list_notes_title) }
+  val textViewNoteContent: TextView by lazy { view.findViewById<TextView>(R.id.adapter_row_list_notes_content) }
 }

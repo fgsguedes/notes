@@ -16,15 +16,11 @@ class NotesModule {
   @Singleton
   fun provideListNotesPresenter(
       notesRepository: NoteRepository
-  ): ListNotesPresenter {
-    return ListNotesPresenterImpl(notesRepository)
-  }
+  ): ListNotesPresenter = ListNotesPresenterImpl(notesRepository)
 
   @Provides
   @Singleton
   fun provideCreateNotePresenter(
       notesRepository: NoteRepository
-  ): CreateNotePresenter {
-    return CreateNotePresenterImpl(notesRepository)
-  }
+  ): CreateNotePresenter = CreateNotePresenterImpl(notesRepository)
 }

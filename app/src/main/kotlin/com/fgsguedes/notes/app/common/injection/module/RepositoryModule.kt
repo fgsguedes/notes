@@ -15,7 +15,5 @@ class RepositoryModule {
   @Singleton
   fun provideNoteRepository(
       @Named("notes") databaseReference: DatabaseReference
-  ): NoteRepository {
-    return NoteRepositoryImpl(databaseReference)
-  }
+  ): NoteRepository = NoteRepositoryImpl(databaseReference)
 }

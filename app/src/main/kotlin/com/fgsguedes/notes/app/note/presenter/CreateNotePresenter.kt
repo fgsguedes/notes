@@ -1,11 +1,10 @@
 package com.fgsguedes.notes.app.note.presenter
 
 import android.os.Bundle
-import android.util.Log
-import com.fgsguedes.notes.app.common.TAG
 import com.fgsguedes.notes.app.common.presenter.Presenter
 import com.fgsguedes.notes.app.note.view.CreateNoteView
 import com.fgsguedes.notes.domain.repository.NoteRepository
+import timber.log.Timber
 
 interface CreateNotePresenter : Presenter<CreateNoteView> {
   fun doneClicked()
@@ -39,7 +38,7 @@ class CreateNotePresenterImpl(
   override fun validForm(title: String, content: String?) {
     noteRepository.create(title, content).subscribe(
         { note -> view.noteCreated(note) },
-        { error -> Log.e(TAG, "Unable to create note", error) }
+        { error -> Timber.e(error, "Unable to create note") }
     )
   }
 

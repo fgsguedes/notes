@@ -7,9 +7,6 @@ import com.fgsguedes.notes.app.common.injection.component.ApplicationComponent
 val AppCompatActivity.applicationComponent: ApplicationComponent
   get() = (application as App).applicationComponent
 
-val <T : Any> T.TAG: String
-  get() = javaClass.simpleName
-
 // To be used with view-click in conjunction with single-line `when` clauses
 fun returningTrue(f: () -> Unit): Boolean {
   f()

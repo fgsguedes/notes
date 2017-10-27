@@ -9,25 +9,26 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 class NoteRepositoryImpl(
-    val databaseReference: DatabaseReference
+    private val databaseReference: DatabaseReference
 ) : NoteRepository {
 
   override fun list(): Observable<Note> = Observable.create<Note> { emitter ->
-    databaseReference
-        .addListenerForSingleValueEvent(object : ValueEventListener {
+    databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
 
-          override fun onDataChange(snapshot: DataSnapshot) {
-            snapshot.children
-                .map { it.getValue(Note::class.java) }
-                .forEach { emitter.onNext(it) }
+      override fun onDataChange(snapshot: DataSnapshot) {
+        snapshot.children
+            .map { it.getValue(Note::class.java) }
+            .forEach {
+              if (it != null) emitter.onNext(it)
+            }
 
-            emitter.onComplete()
-          }
+        emitter.onComplete()
+      }
 
-          override fun onCancelled(error: DatabaseError) {
-            emitter.onError(error.toException())
-          }
-        })
+      override fun onCancelled(error: DatabaseError) {
+        emitter.onError(error.toException())
+      }
+    })
   }
 
   override fun create(

@@ -1,11 +1,10 @@
 package com.fgsguedes.notes.app.note.presenter
 
 import android.os.Bundle
-import android.util.Log
-import com.fgsguedes.notes.app.common.TAG
 import com.fgsguedes.notes.app.note.view.ListNotesView
 import com.fgsguedes.notes.domain.model.Note
 import com.fgsguedes.notes.domain.repository.NoteRepository
+import timber.log.Timber
 
 class ListNotesPresenterImpl(
     private val notesRepository: NoteRepository
@@ -21,7 +20,7 @@ class ListNotesPresenterImpl(
     notesRepository.list()
         .subscribe(
             { note -> view.showNote(note) },
-            { error -> Log.e(TAG, "Unable do get notes", error) }
+            { error -> Timber.e(error, "Unable do get notes") }
         )
   }
 

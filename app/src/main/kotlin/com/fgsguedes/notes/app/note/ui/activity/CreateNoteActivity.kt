@@ -18,10 +18,10 @@ import javax.inject.Inject
 
 class CreateNoteActivity : BaseActivity(), CreateNoteView {
 
-  val toolbar by lazy { findViewById(R.id.toolbar) as Toolbar }
+  private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
 
-  val editTextNoteTitle by lazy { findViewById(R.id.edit_text_note_title) as EditText }
-  val editTextNoteContent by lazy { findViewById(R.id.edit_text_note_content) as EditText }
+  private val editTextNoteTitle by lazy { findViewById<EditText>(R.id.edit_text_note_title) }
+  private val editTextNoteContent by lazy { findViewById<EditText>(R.id.edit_text_note_content) }
 
   @Inject
   lateinit var presenter: CreateNotePresenter
