@@ -63,23 +63,22 @@ androidExtensions {
 
 dependencies {
 
-  kapt "com.google.dagger:dagger-compiler:2.11"
+  kapt "com.google.dagger:dagger-compiler:2.15"
   compileOnly "javax.annotation:jsr250-api:1.0"
 
-  implementation "org.jetbrains.kotlin:kotlin-stdlib:1.1.51"
-  implementation "org.jetbrains.anko:anko-sdk15:0.10.1"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:1.2.30"
 
-  implementation "com.android.support:design:27.0.0"
-  implementation "com.android.support:support-vector-drawable:27.0.0"
+  implementation "com.android.support:design:27.1.0"
+  implementation "com.android.support:support-vector-drawable:27.1.0"
 
-  implementation "com.google.firebase:firebase-database:11.4.2"
-  implementation "com.google.firebase:firebase-auth:11.4.2"
+  implementation "com.google.firebase:firebase-database:11.8.0"
+  implementation "com.google.firebase:firebase-auth:11.8.0"
 
-  implementation "com.google.dagger:dagger:2.11"
+  implementation "com.google.dagger:dagger:2.15"
 
-  implementation "io.reactivex.rxjava2:rxjava:2.1.3"
+  implementation "io.reactivex.rxjava2:rxjava:2.1.10"
 
-  implementation 'com.jakewharton.timber:timber:4.5.1'
+  implementation 'com.jakewharton.timber:timber:4.6.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

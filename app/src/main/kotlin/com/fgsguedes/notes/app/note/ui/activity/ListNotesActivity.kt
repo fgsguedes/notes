@@ -4,23 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import com.fgsguedes.notes.R
 import com.fgsguedes.notes.app.common.applicationComponent
 import com.fgsguedes.notes.app.common.ui.activity.ActivityRequestCodes
-import com.fgsguedes.notes.app.common.ui.activity.BaseActivity
 import com.fgsguedes.notes.app.note.presenter.ListNotesPresenter
 import com.fgsguedes.notes.app.note.ui.adapter.NotesAdapter
 import com.fgsguedes.notes.app.note.view.ListNotesView
 import com.fgsguedes.notes.domain.model.Note
-import org.jetbrains.anko.intentFor
 import javax.inject.Inject
 
-class ListNotesActivity : BaseActivity(), ListNotesView {
+class ListNotesActivity : AppCompatActivity(), ListNotesView {
 
-  @Inject lateinit var presenter: ListNotesPresenter
+  @Inject
+  lateinit var presenter: ListNotesPresenter
 
   private val recyclerNotesList by lazy { findViewById<RecyclerView>(R.id.recycler_notes_list) }
   private val floatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.fab) }
@@ -62,10 +62,10 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     adapter.addItem(note)
   }
 
-  override fun openCreateNoteForm() = startActivityForResult(
-      intentFor<CreateNoteActivity>(),
-      ActivityRequestCodes.createNote
-  )
+  override fun openCreateNoteForm() {
+    val intent = Intent(this, CreateNoteActivity::class.java)
+    startActivityForResult(intent, ActivityRequestCodes.CREATE_NOTE)
+  }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     val note = data?.getParcelableExtra<Note>("note")
@@ -76,11 +76,11 @@ class ListNotesActivity : BaseActivity(), ListNotesView {
     }
 
     when (requestCode) {
-      ActivityRequestCodes.createNote -> presenter.noteCreated(note)
+      ActivityRequestCodes.CREATE_NOTE -> presenter.noteCreated(note)
     }
   }
 
   companion object {
-    val KEY_RECYCLER_VIEW_STATE = "recyclerViewState"
+    const val KEY_RECYCLER_VIEW_STATE = "recyclerViewState"
   }
 }

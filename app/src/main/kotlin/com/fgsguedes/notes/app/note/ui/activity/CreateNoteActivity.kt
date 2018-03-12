@@ -3,6 +3,7 @@ package com.fgsguedes.notes.app.note.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -10,13 +11,12 @@ import android.widget.EditText
 import com.fgsguedes.notes.R
 import com.fgsguedes.notes.app.common.applicationComponent
 import com.fgsguedes.notes.app.common.returningTrue
-import com.fgsguedes.notes.app.common.ui.activity.BaseActivity
 import com.fgsguedes.notes.app.note.presenter.CreateNotePresenter
 import com.fgsguedes.notes.app.note.view.CreateNoteView
 import com.fgsguedes.notes.domain.model.Note
 import javax.inject.Inject
 
-class CreateNoteActivity : BaseActivity(), CreateNoteView {
+class CreateNoteActivity : AppCompatActivity(), CreateNoteView {
 
   private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
 
@@ -35,8 +35,9 @@ class CreateNoteActivity : BaseActivity(), CreateNoteView {
     initPresenter(savedInstanceState)
   }
 
-  override fun onSaveInstanceState(outState: Bundle?) {
+  override fun onSaveInstanceState(outState: Bundle) {
     presenter.onSaveInstanceState(outState)
+    super.onSaveInstanceState(outState)
   }
 
   private fun initUi(savedInstanceState: Bundle?) {
