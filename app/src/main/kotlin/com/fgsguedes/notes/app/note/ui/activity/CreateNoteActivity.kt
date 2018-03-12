@@ -9,45 +9,31 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import com.fgsguedes.notes.R
-import com.fgsguedes.notes.app.common.applicationComponent
 import com.fgsguedes.notes.app.common.returningTrue
 import com.fgsguedes.notes.app.note.presenter.CreateNotePresenter
 import com.fgsguedes.notes.app.note.view.CreateNoteView
 import com.fgsguedes.notes.domain.model.Note
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class CreateNoteActivity : AppCompatActivity(), CreateNoteView {
+
+  @Inject
+  lateinit var presenter: CreateNotePresenter
 
   private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
 
   private val editTextNoteTitle by lazy { findViewById<EditText>(R.id.edit_text_note_title) }
   private val editTextNoteContent by lazy { findViewById<EditText>(R.id.edit_text_note_content) }
 
-  @Inject
-  lateinit var presenter: CreateNotePresenter
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_create_note)
 
-    applicationComponent.inject(this)
-    initUi(savedInstanceState)
-    initPresenter(savedInstanceState)
-  }
+    AndroidInjection.inject(this)
 
-  override fun onSaveInstanceState(outState: Bundle) {
-    presenter.onSaveInstanceState(outState)
-    super.onSaveInstanceState(outState)
-  }
-
-  private fun initUi(savedInstanceState: Bundle?) {
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-  }
-
-  private fun initPresenter(savedInstanceState: Bundle?) {
-    presenter.bindView(this)
-    presenter.onCreate(savedInstanceState, intent.extras)
   }
 
   override fun onCreateOptionsMenu(menu: Menu) = returningTrue {

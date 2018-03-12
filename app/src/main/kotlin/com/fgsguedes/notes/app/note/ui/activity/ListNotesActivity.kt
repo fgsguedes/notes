@@ -9,12 +9,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import com.fgsguedes.notes.R
-import com.fgsguedes.notes.app.common.applicationComponent
 import com.fgsguedes.notes.app.common.ui.activity.ActivityRequestCodes
 import com.fgsguedes.notes.app.note.presenter.ListNotesPresenter
 import com.fgsguedes.notes.app.note.ui.adapter.NotesAdapter
 import com.fgsguedes.notes.app.note.view.ListNotesView
 import com.fgsguedes.notes.domain.model.Note
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class ListNotesActivity : AppCompatActivity(), ListNotesView {
@@ -22,9 +22,10 @@ class ListNotesActivity : AppCompatActivity(), ListNotesView {
   @Inject
   lateinit var presenter: ListNotesPresenter
 
+  private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
+
   private val recyclerNotesList by lazy { findViewById<RecyclerView>(R.id.recycler_notes_list) }
   private val floatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.fab) }
-  private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
 
   private val adapter = NotesAdapter(this)
 
@@ -32,9 +33,10 @@ class ListNotesActivity : AppCompatActivity(), ListNotesView {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_list_notes)
 
-    applicationComponent.inject(this)
+    AndroidInjection.inject(this)
+
     initUi(savedInstanceState)
-    initPresenter(savedInstanceState)
+    presenter.onCreate()
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
@@ -51,11 +53,6 @@ class ListNotesActivity : AppCompatActivity(), ListNotesView {
       if (state != null) onRestoreInstanceState(state)
     }
     recyclerNotesList.adapter = adapter
-  }
-
-  private fun initPresenter(savedInstanceState: Bundle?) {
-    presenter.bindView(this)
-    presenter.onCreate(savedInstanceState, intent.extras)
   }
 
   override fun showNote(note: Note) {
