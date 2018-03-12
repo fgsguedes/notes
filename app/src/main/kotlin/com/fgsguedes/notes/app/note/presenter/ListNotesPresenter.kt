@@ -15,12 +15,7 @@ class ListNotesPresenter @Inject constructor(
         notesRepository.list()
             .subscribe(
                 { note -> view.showNote(note) },
-                { error ->
-                    Timber.e(
-                        error,
-                        "Unable do get notes"
-                    )
-                }
+                { error -> Timber.e(error, "Unable do get notes") }
             )
     }
 

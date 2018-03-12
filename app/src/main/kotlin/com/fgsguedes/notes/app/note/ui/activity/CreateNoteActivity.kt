@@ -19,8 +19,7 @@ import com.fgsguedes.notes.domain.model.Note
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class CreateNoteActivity : AppCompatActivity(),
-    CreateNoteView {
+class CreateNoteActivity : AppCompatActivity(), CreateNoteView {
 
     @Inject
     lateinit var presenter: CreateNotePresenter
@@ -28,16 +27,8 @@ class CreateNoteActivity : AppCompatActivity(),
     private val rootView: View by bind(R.id.create_note_root_view)
     private val toolbar: Toolbar by bind(R.id.toolbar)
 
-    private val editTextNoteTitle by lazy {
-        findViewById<EditText>(
-            R.id.edit_text_note_title
-        )
-    }
-    private val editTextNoteContent by lazy {
-        findViewById<EditText>(
-            R.id.edit_text_note_content
-        )
-    }
+    private val editTextNoteTitle: EditText by bind(R.id.edit_text_note_title)
+    private val editTextNoteContent: EditText by bind(R.id.edit_text_note_content)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,15 +40,12 @@ class CreateNoteActivity : AppCompatActivity(),
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu) =
-        returningTrue {
-            menuInflater.inflate(
-                R.menu.menu_activity_create_note,
-                menu
-            )
-        }
+    override fun onCreateOptionsMenu(menu: Menu) = returningTrue {
+        menuInflater.inflate(R.menu.menu_activity_create_note, menu)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         return when (item.itemId) {
             R.id.menu_item_done_creating_note -> returningTrue {
                 presenter.doneClicked(
@@ -70,22 +58,14 @@ class CreateNoteActivity : AppCompatActivity(),
     }
 
     override fun noteCreated(note: Note) {
-        setResult(
-            Activity.RESULT_OK,
-            Intent().putExtra("note", note)
-        )
+        val intent = Intent().putExtra("note", note)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
     override fun invalidForm() {
-        Snackbar.make(
-            rootView,
-            R.string.create_note_fields_required_message,
-            Snackbar.LENGTH_LONG
-        )
-            .setAction(
-                R.string.create_note_fields_required_action,
-                {})
+        Snackbar.make(rootView, R.string.create_note_fields_required_message, Snackbar.LENGTH_LONG)
+            .setAction(R.string.create_note_fields_required_action, {})
             .show()
     }
 }

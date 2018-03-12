@@ -36,14 +36,10 @@ class App : Application(), HasActivityInjector {
             .addOnCompleteListener { authResult ->
                 when {
                     authResult.isSuccessful -> Timber.i("Auth successful: ${authResult.result.user.uid}")
-                    else -> Timber.e(
-                        authResult.exception,
-                        "No auth for you"
-                    )
+                    else -> Timber.e(authResult.exception, "No auth for you")
                 }
             }
     }
 
-    override fun activityInjector() =
-        dispatchingAndroidInjector
+    override fun activityInjector() = dispatchingAndroidInjector
 }

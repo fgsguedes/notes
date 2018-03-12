@@ -11,11 +11,7 @@ class NotesAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<NotesViewHolder>() {
 
-    private val inflater by lazy {
-        LayoutInflater.from(
-            context
-        )
-    }
+    private val inflater by lazy { LayoutInflater.from(context) }
     private val notes = mutableListOf<Note>()
 
     override fun onCreateViewHolder(
