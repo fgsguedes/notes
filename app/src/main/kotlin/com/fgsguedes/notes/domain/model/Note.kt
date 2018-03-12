@@ -11,5 +11,5 @@ data class Note(
     val label: Label? = null,
     val remindOn: Date? = null
 ) : Parcelable {
-  private constructor() : this("", "") // For Firebase
+    private constructor() : this("", "") // For Firebase
 }

@@ -11,23 +11,23 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityBindingModule {
 
-  @ContributesAndroidInjector(modules = [CreateNoteModule::class])
-  abstract fun createNoteActivity(): CreateNoteActivity
+    @ContributesAndroidInjector(modules = [CreateNoteModule::class])
+    abstract fun createNoteActivity(): CreateNoteActivity
 
-  @ContributesAndroidInjector(modules = [ListNotesModule::class])
-  abstract fun listNotesActivity(): ListNotesActivity
+    @ContributesAndroidInjector(modules = [ListNotesModule::class])
+    abstract fun listNotesActivity(): ListNotesActivity
 }
 
 @Module
 abstract class CreateNoteModule {
 
-  @Binds
-  abstract fun bindActivity(activity: CreateNoteActivity): CreateNoteView
+    @Binds
+    abstract fun bindActivity(activity: CreateNoteActivity): CreateNoteView
 }
 
 @Module
 abstract class ListNotesModule {
 
-  @Binds
-  abstract fun bindActivity(activity: ListNotesActivity): ListNotesView
+    @Binds
+    abstract fun bindActivity(activity: ListNotesActivity): ListNotesView
 }

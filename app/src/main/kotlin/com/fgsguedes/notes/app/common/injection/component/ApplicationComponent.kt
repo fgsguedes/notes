@@ -12,19 +12,19 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-      AndroidInjectionModule::class,
-      ActivityBindingModule::class,
-      FirebaseModule::class
+        AndroidInjectionModule::class,
+        ActivityBindingModule::class,
+        FirebaseModule::class
     ]
 )
 interface ApplicationComponent : MembersInjector<App> {
 
-  @Component.Builder
-  interface Builder {
+    @Component.Builder
+    interface Builder {
 
-    @BindsInstance
-    fun application(application: App): Builder
+        @BindsInstance
+        fun application(application: App): Builder
 
-    fun build(): ApplicationComponent
-  }
+        fun build(): ApplicationComponent
+    }
 }

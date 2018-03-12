@@ -10,18 +10,21 @@ import javax.inject.Singleton
 @Module
 class FirebaseModule {
 
-  @Provides
-  @Singleton
-  fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth =
+        FirebaseAuth.getInstance()
 
-  @Provides
-  @Singleton
-  fun provideFirebaseDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance().apply {
-    setPersistenceEnabled(true)
-  }
+    @Provides
+    @Singleton
+    fun provideFirebaseDatabase(): FirebaseDatabase =
+        FirebaseDatabase.getInstance().apply {
+            setPersistenceEnabled(true)
+        }
 
-  @Provides
-  fun provideNoteDatabaseReference(
-      firebaseDatabase: FirebaseDatabase
-  ): DatabaseReference = firebaseDatabase.getReference("notes")
+    @Provides
+    fun provideNoteDatabaseReference(
+        firebaseDatabase: FirebaseDatabase
+    ): DatabaseReference =
+        firebaseDatabase.getReference("notes")
 }

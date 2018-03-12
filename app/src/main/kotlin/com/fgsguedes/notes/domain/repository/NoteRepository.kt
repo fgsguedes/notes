@@ -13,32 +13,36 @@ class NoteRepository @Inject constructor(
     private val databaseReference: DatabaseReference
 ) {
 
-  fun list(): Observable<Note> = Observable.create<Note> { emitter ->
-    databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+    fun list(): Observable<Note> =
+        Observable.create<Note> { emitter ->
+            databaseReference.addListenerForSingleValueEvent(
+                object : ValueEventListener {
 
-      override fun onDataChange(snapshot: DataSnapshot) {
-        snapshot.children
-            .map { it.getValue(Note::class.java) }
-            .forEach {
-              if (it != null) emitter.onNext(it)
-            }
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.children
+                            .map { it.getValue(Note::class.java) }
+                            .forEach {
+                                if (it != null) emitter.onNext(
+                                    it
+                                )
+                            }
 
-        emitter.onComplete()
-      }
+                        emitter.onComplete()
+                    }
 
-      override fun onCancelled(error: DatabaseError) {
-        emitter.onError(error.toException())
-      }
-    })
-  }
+                    override fun onCancelled(error: DatabaseError) {
+                        emitter.onError(error.toException())
+                    }
+                })
+        }
 
-  fun create(
-      title: String,
-      content: String?
-  ): Single<Note> = Single.fromCallable {
-    Note(title, content).apply {
-      val key = databaseReference.push().key
-      databaseReference.child(key).setValue(this)
+    fun create(
+        title: String,
+        content: String?
+    ): Single<Note> = Single.fromCallable {
+        Note(title, content).apply {
+            val key = databaseReference.push().key
+            databaseReference.child(key).setValue(this)
+        }
     }
-  }
 }

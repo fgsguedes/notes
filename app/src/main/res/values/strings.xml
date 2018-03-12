@@ -1,16 +1,16 @@
 <resources>
-  <string name="app_name">Notes</string>
-  <string name="create_note">Create note</string>
+    <string name="app_name">Notes</string>
+    <string name="create_note">Create note</string>
 
-  <string name="hint_note_title">Title</string>
-  <string name="hint_note_content">Content</string>
+    <string name="hint_note_title">Title</string>
+    <string name="hint_note_content">Content</string>
 
-  <string name="new_note_dialog_title">New note</string>
+    <string name="new_note_dialog_title">New note</string>
 
-  <string name="save">Save</string>
-  <string name="activity_label_new_note">New note</string>
-  <string name="done">Done</string>
+    <string name="save">Save</string>
+    <string name="activity_label_new_note">New note</string>
+    <string name="done">Done</string>
 
-  <string name="create_note_fields_required_message">Note title and content are mandatory</string>
-  <string name="create_note_fields_required_action">OK</string>
+    <string name="create_note_fields_required_message">Note title and content are mandatory</string>
+    <string name="create_note_fields_required_action">OK</string>
 </resources>

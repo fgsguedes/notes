@@ -11,19 +11,24 @@ class ListNotesPresenter @Inject constructor(
     private val notesRepository: NoteRepository
 ) {
 
-  fun onCreate() {
-    notesRepository.list()
-        .subscribe(
-            { note -> view.showNote(note) },
-            { error -> Timber.e(error, "Unable do get notes") }
-        )
-  }
+    fun onCreate() {
+        notesRepository.list()
+            .subscribe(
+                { note -> view.showNote(note) },
+                { error ->
+                    Timber.e(
+                        error,
+                        "Unable do get notes"
+                    )
+                }
+            )
+    }
 
-  fun onCreateNoteClicked() {
-    view.openCreateNoteForm()
-  }
+    fun onCreateNoteClicked() {
+        view.openCreateNoteForm()
+    }
 
-  fun noteCreated(note: Note) {
-    view.showNote(note)
-  }
+    fun noteCreated(note: Note) {
+        view.showNote(note)
+    }
 }

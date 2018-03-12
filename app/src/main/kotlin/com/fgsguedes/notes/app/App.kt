@@ -12,34 +12,38 @@ import javax.inject.Inject
 
 class App : Application(), HasActivityInjector {
 
-  @Inject
-  lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
-  @Inject
-  lateinit var firebaseAuth: FirebaseAuth
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
-  @Inject
-  lateinit var firebaseDatabase: FirebaseDatabase
+    @Inject
+    lateinit var firebaseDatabase: FirebaseDatabase
 
-  override fun onCreate() {
-    super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
-    DaggerApplicationComponent.builder()
-        .application(this)
-        .build()
-        .injectMembers(this)
+        DaggerApplicationComponent.builder()
+            .application(this)
+            .build()
+            .injectMembers(this)
 
-    Timber.plant(Timber.DebugTree())
+        Timber.plant(Timber.DebugTree())
 
-    firebaseDatabase.setPersistenceEnabled(true)
-    firebaseAuth.signInAnonymously()
-        .addOnCompleteListener { authResult ->
-          when {
-            authResult.isSuccessful -> Timber.i("Auth successful: ${authResult.result.user.uid}")
-            else -> Timber.e(authResult.exception, "No auth for you")
-          }
-        }
-  }
+        firebaseDatabase.setPersistenceEnabled(true)
+        firebaseAuth.signInAnonymously()
+            .addOnCompleteListener { authResult ->
+                when {
+                    authResult.isSuccessful -> Timber.i("Auth successful: ${authResult.result.user.uid}")
+                    else -> Timber.e(
+                        authResult.exception,
+                        "No auth for you"
+                    )
+                }
+            }
+    }
 
-  override fun activityInjector() = dispatchingAndroidInjector
+    override fun activityInjector() =
+        dispatchingAndroidInjector
 }
