@@ -58,7 +58,7 @@ class CreateNoteActivity : AppCompatActivity(), CreateNoteView {
     }
 
     override fun noteCreated(note: Note) {
-        val intent = Intent().putExtra("note", note)
+        val intent = Intent().putExtra(EXTRA_NOTE, note)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
@@ -67,5 +67,9 @@ class CreateNoteActivity : AppCompatActivity(), CreateNoteView {
         Snackbar.make(rootView, R.string.create_note_fields_required_message, Snackbar.LENGTH_LONG)
             .setAction(R.string.create_note_fields_required_action, {})
             .show()
+    }
+
+    companion object {
+        const val EXTRA_NOTE = "EXTRA_NOTE"
     }
 }

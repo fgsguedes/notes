@@ -69,7 +69,7 @@ class ListNotesActivity : AppCompatActivity(), ListNotesView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val note = data?.getParcelableExtra<Note>("note")
+        val note = data?.getParcelableExtra<Note>(CreateNoteActivity.EXTRA_NOTE)
 
         if (resultCode != RESULT_OK || note == null) {
             super.onActivityResult(requestCode, resultCode, data)
@@ -82,7 +82,6 @@ class ListNotesActivity : AppCompatActivity(), ListNotesView {
     }
 
     companion object {
-        const val KEY_RECYCLER_VIEW_STATE =
-            "recyclerViewState"
+        const val KEY_RECYCLER_VIEW_STATE = "KEY_RECYCLER_VIEW_STATE"
     }
 }
