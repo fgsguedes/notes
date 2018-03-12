@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import com.fgsguedes.notes.R
+import com.fgsguedes.notes.app.common.bind
 import com.fgsguedes.notes.app.common.ui.activity.ActivityRequestCodes
 import com.fgsguedes.notes.app.note.presenter.ListNotesPresenter
 import com.fgsguedes.notes.app.note.ui.adapter.NotesAdapter
@@ -17,24 +18,15 @@ import com.fgsguedes.notes.domain.model.Note
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class ListNotesActivity : AppCompatActivity(),
-    ListNotesView {
+class ListNotesActivity : AppCompatActivity(), ListNotesView {
 
     @Inject
     lateinit var presenter: ListNotesPresenter
 
-    private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
+    private val toolbar: Toolbar by bind(R.id.toolbar)
 
-    private val recyclerNotesList by lazy {
-        findViewById<RecyclerView>(
-            R.id.recycler_notes_list
-        )
-    }
-    private val floatingActionButton by lazy {
-        findViewById<FloatingActionButton>(
-            R.id.fab
-        )
-    }
+    private val recyclerNotesList: RecyclerView by bind(R.id.recycler_notes_list)
+    private val floatingActionButton: FloatingActionButton by bind(R.id.fab)
 
     private val adapter = NotesAdapter(this)
 
@@ -56,20 +48,14 @@ class ListNotesActivity : AppCompatActivity(),
         super.onSaveInstanceState(outState)
     }
 
-    private fun initUi(savedInstanceState: Bundle?) {
+    private fun initUi(bundle: Bundle?) {
         setSupportActionBar(toolbar)
         floatingActionButton.setOnClickListener { presenter.onCreateNoteClicked() }
 
-        val state =
-            savedInstanceState?.getParcelable<Parcelable>(
-                KEY_RECYCLER_VIEW_STATE
-            )
-        recyclerNotesList.layoutManager =
-                LinearLayoutManager(this).apply {
-                    if (state != null) onRestoreInstanceState(
-                        state
-                    )
-                }
+        val state = bundle?.getParcelable<Parcelable>(KEY_RECYCLER_VIEW_STATE)
+        recyclerNotesList.layoutManager = LinearLayoutManager(this).apply {
+            if (state != null) onRestoreInstanceState(state)
+        }
         recyclerNotesList.adapter = adapter
     }
 
@@ -78,34 +64,20 @@ class ListNotesActivity : AppCompatActivity(),
     }
 
     override fun openCreateNoteForm() {
-        val intent =
-            Intent(this, CreateNoteActivity::class.java)
-        startActivityForResult(
-            intent,
-            ActivityRequestCodes.CREATE_NOTE
-        )
+        val intent = Intent(this, CreateNoteActivity::class.java)
+        startActivityForResult(intent, ActivityRequestCodes.CREATE_NOTE)
     }
 
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val note = data?.getParcelableExtra<Note>("note")
 
         if (resultCode != RESULT_OK || note == null) {
-            super.onActivityResult(
-                requestCode,
-                resultCode,
-                data
-            )
+            super.onActivityResult(requestCode, resultCode, data)
             return
         }
 
         when (requestCode) {
-            ActivityRequestCodes.CREATE_NOTE -> presenter.noteCreated(
-                note
-            )
+            ActivityRequestCodes.CREATE_NOTE -> presenter.noteCreated(note)
         }
     }
 

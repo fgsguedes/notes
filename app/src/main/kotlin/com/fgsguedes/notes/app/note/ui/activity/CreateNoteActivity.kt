@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import com.fgsguedes.notes.R
+import com.fgsguedes.notes.app.common.bind
 import com.fgsguedes.notes.app.common.returningTrue
 import com.fgsguedes.notes.app.note.presenter.CreateNotePresenter
 import com.fgsguedes.notes.app.note.view.CreateNoteView
@@ -24,8 +25,8 @@ class CreateNoteActivity : AppCompatActivity(),
     @Inject
     lateinit var presenter: CreateNotePresenter
 
-    private val rootView by lazy { findViewById<View>(R.id.create_note_root_view) }
-    private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
+    private val rootView: View by bind(R.id.create_note_root_view)
+    private val toolbar: Toolbar by bind(R.id.toolbar)
 
     private val editTextNoteTitle by lazy {
         findViewById<EditText>(
