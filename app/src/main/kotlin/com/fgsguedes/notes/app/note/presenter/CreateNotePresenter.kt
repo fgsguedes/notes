@@ -10,16 +10,16 @@ class CreateNotePresenter @Inject constructor(
     private val noteRepository: NoteRepository
 ) {
 
-  fun doneClicked() {
-    view.validateForm()
-  }
+  fun doneClicked(title: String, content: String) {
 
-  fun validForm(title: String, content: String?) {
-    noteRepository.create(title, content).subscribe(
-        { note -> view.noteCreated(note) },
-        { error -> Timber.e(error, "Unable to create note") }
-    )
-  }
+    if (title.isNotBlank() && content.isNotBlank()) {
+      noteRepository.create(title, content).subscribe(
+          { view.noteCreated(it) },
+          { Timber.e(it, "Unable to create note") }
+      )
 
-  fun invalidForm(): Unit = TODO()
+    } else {
+      view.invalidForm()
+    }
+  }
 }

@@ -3,10 +3,12 @@ package com.fgsguedes.notes.app.note.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import com.fgsguedes.notes.R
 import com.fgsguedes.notes.app.common.returningTrue
@@ -21,6 +23,7 @@ class CreateNoteActivity : AppCompatActivity(), CreateNoteView {
   @Inject
   lateinit var presenter: CreateNotePresenter
 
+  private val rootView by lazy { findViewById<View>(R.id.create_note_root_view) }
   private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
 
   private val editTextNoteTitle by lazy { findViewById<EditText>(R.id.edit_text_note_title) }
@@ -43,24 +46,23 @@ class CreateNoteActivity : AppCompatActivity(), CreateNoteView {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
       R.id.menu_item_done_creating_note -> returningTrue {
-        presenter.doneClicked()
+        presenter.doneClicked(
+            editTextNoteTitle.text.toString(),
+            editTextNoteContent.text.toString()
+        )
       }
       else -> false
-    }
-  }
-
-  override fun validateForm() {
-    val title = editTextNoteTitle.text.toString()
-    val content = editTextNoteContent.text.toString()
-
-    when {
-      title.isNotBlank() && content.isNotBlank() -> presenter.validForm(title, content)
-      else -> presenter.invalidForm()
     }
   }
 
   override fun noteCreated(note: Note) {
     setResult(Activity.RESULT_OK, Intent().putExtra("note", note))
     finish()
+  }
+
+  override fun invalidForm() {
+    Snackbar.make(rootView, R.string.create_note_fields_required_message, Snackbar.LENGTH_LONG)
+        .setAction(R.string.create_note_fields_required_action, {})
+        .show()
   }
 }

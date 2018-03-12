@@ -22,7 +22,8 @@
     <activity
         android:name=".app.note.ui.activity.CreateNoteActivity"
         android:label="@string/activity_label_new_note"
-        android:parentActivityName=".app.note.ui.activity.ListNotesActivity"/>
+        android:parentActivityName=".app.note.ui.activity.ListNotesActivity"
+        android:windowSoftInputMode="adjustResize"/>
 
   </application>
 
