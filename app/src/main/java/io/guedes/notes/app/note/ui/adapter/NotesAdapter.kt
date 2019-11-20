@@ -1,9 +1,9 @@
 package io.guedes.notes.app.note.ui.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import io.guedes.notes.R
 import io.guedes.notes.domain.model.Note
 

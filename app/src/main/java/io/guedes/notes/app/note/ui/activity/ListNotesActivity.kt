@@ -3,23 +3,21 @@ package io.guedes.notes.app.note.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.guedes.notes.R
+import io.guedes.notes.app.common.bind
 import io.guedes.notes.app.common.ui.activity.ActivityRequestCodes
 import io.guedes.notes.app.note.presenter.ListNotesPresenter
 import io.guedes.notes.app.note.ui.adapter.NotesAdapter
 import io.guedes.notes.app.note.view.ListNotesView
 import io.guedes.notes.domain.model.Note
-import dagger.android.AndroidInjection
-import javax.inject.Inject
 
 class ListNotesActivity : AppCompatActivity(), ListNotesView {
 
-    @Inject
     lateinit var presenter: ListNotesPresenter
 
     private val toolbar: Toolbar by bind(R.id.toolbar)
@@ -33,8 +31,6 @@ class ListNotesActivity : AppCompatActivity(), ListNotesView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_notes)
 
-        AndroidInjection.inject(this)
-
         initUi(savedInstanceState)
         presenter.onCreate()
     }
@@ -42,7 +38,7 @@ class ListNotesActivity : AppCompatActivity(), ListNotesView {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(
             KEY_RECYCLER_VIEW_STATE,
-            recyclerNotesList.layoutManager.onSaveInstanceState()
+            recyclerNotesList.layoutManager?.onSaveInstanceState()
         )
         super.onSaveInstanceState(outState)
     }
@@ -67,7 +63,11 @@ class ListNotesActivity : AppCompatActivity(), ListNotesView {
         startActivityForResult(intent, ActivityRequestCodes.CREATE_NOTE)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
         val note = data?.getParcelableExtra<Note>(CreateNoteActivity.EXTRA_NOTE)
 
         if (resultCode != RESULT_OK || note == null) {

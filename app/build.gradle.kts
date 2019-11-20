@@ -33,6 +33,8 @@ android {
 dependencies {
     implementation(kotlin(Deps.kotlinStdlib, KotlinCompilerVersion.VERSION))
 
+//    kapt(Deps.roomCompiler)
+    
     implementation(Deps.androidxCore)
     implementation(Deps.androidxAppCompat)
     implementation(Deps.androidxRecyclerView)
@@ -41,7 +43,10 @@ dependencies {
 
     implementation(Deps.googleMaterial)
 
+    implementation(Deps.roomKtx)
     implementation(Deps.roomRuntime)
+
+    implementation(Deps.timber)
 
     testImplementation(Deps.junit)
 
