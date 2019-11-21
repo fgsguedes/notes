@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.guedes.notes.domain.repository.NoteRepository
 
-object CreateNoteViewModelFactory : ViewModelProvider.Factory {
+class CreateNoteViewModelFactory(
+    private val noteRepository: NoteRepository
+) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        CreateNoteViewModel(NoteRepository) as T
+        CreateNoteViewModel(noteRepository) as T
 }

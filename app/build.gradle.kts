@@ -38,7 +38,7 @@ dependencies {
 
     implementation(Deps.coroutines)
 
-//    kapt(Deps.roomCompiler)
+    kapt(Deps.roomCompiler)
 
     implementation(Deps.androidxCore)
 

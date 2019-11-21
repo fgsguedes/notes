@@ -10,13 +10,16 @@ import io.guedes.notes.R
 import io.guedes.notes.app.note.create.ui.CreateNoteActivity
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModel
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModelFactory
+import io.guedes.notes.dependencies.provideFactory
 import kotlinx.android.synthetic.main.activity_list_notes.fabCreateNote
 import kotlinx.android.synthetic.main.activity_list_notes.rvNotes
 import kotlinx.android.synthetic.main.activity_list_notes.toolbar
 
 class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
 
-    private val viewModel: ListNotesViewModel by viewModels { ListNotesViewModelFactory }
+    private val viewModel: ListNotesViewModel by viewModels {
+        provideFactory<ListNotesViewModelFactory>()
+    }
 
     private val adapter by lazy { NotesAdapter() }
 

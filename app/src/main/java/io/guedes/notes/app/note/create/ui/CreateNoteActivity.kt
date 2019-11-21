@@ -11,6 +11,7 @@ import io.guedes.notes.app.note.create.viewmodel.CreateNoteViewModel
 import io.guedes.notes.app.note.create.viewmodel.CreateNoteViewModel.Result.CREATED
 import io.guedes.notes.app.note.create.viewmodel.CreateNoteViewModel.Result.INVALID
 import io.guedes.notes.app.note.create.viewmodel.CreateNoteViewModelFactory
+import io.guedes.notes.dependencies.provideFactory
 import kotlinx.android.synthetic.main.activity_create_note.createNoteRootView
 import kotlinx.android.synthetic.main.activity_create_note.etNoteContent
 import kotlinx.android.synthetic.main.activity_create_note.etNoteTitle
@@ -19,7 +20,9 @@ import kotlinx.android.synthetic.main.activity_create_note.toolbar
 
 class CreateNoteActivity : AppCompatActivity(R.layout.activity_create_note) {
 
-    private val viewModel: CreateNoteViewModel by viewModels { CreateNoteViewModelFactory }
+    private val viewModel: CreateNoteViewModel by viewModels {
+        provideFactory<CreateNoteViewModelFactory>()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

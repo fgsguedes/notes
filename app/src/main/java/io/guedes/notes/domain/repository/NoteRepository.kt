@@ -6,9 +6,8 @@ class NoteRepository(
     private val noteDao: NoteDao
 ) {
 
-    suspend fun list() =
-        noteDao.list()
+    fun list() = noteDao.list()
 
     suspend fun create(title: String, content: String?) =
-        noteDao.insert(Note(1L, title, content))
+        noteDao.insert(Note(title, content))
 }

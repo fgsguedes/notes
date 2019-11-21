@@ -18,19 +18,18 @@ class CreateNoteViewModel(
     fun doneClicked(title: String, content: String) {
 
         if (title.isNotBlank() && content.isNotBlank()) {
-            result.postValue(Result.INVALID)
-
-        } else {
             viewModelScope.launch {
                 noteRepository.create(title, content)
                 result.postValue(Result.CREATED)
             }
+
+        } else {
+            result.postValue(Result.INVALID)
         }
     }
 
     enum class Result {
         CREATED, INVALID
     }
-
 }
 
