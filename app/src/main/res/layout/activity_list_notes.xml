@@ -21,20 +21,22 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_notes_list"
+        android:id="@+id/rvNotes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/adaper_row_list_notes" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabCreateNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:elevation="6dp"
-        app:layout_anchor="@id/recycler_notes_list"
+        app:layout_anchor="@id/rvNotes"
         app:layout_anchorGravity="bottom|right|end"
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/ic_note_add_white_24px" />

@@ -1,15 +1,13 @@
 package io.guedes.notes.app.common
 
+import android.view.LayoutInflater
 import android.view.View
-import androidx.annotation.IdRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.LayoutRes
 
-fun <T : View> AppCompatActivity.bind(@IdRes viewId: Int) =
-    lazy { findViewById<T>(viewId) }
+val TextView.stringText: String
+    get() = text.toString()
 
-fun <T : View> RecyclerView.ViewHolder.bind(@IdRes viewId: Int) =
-    lazy { itemView.findViewById<T>(viewId) }
-
-// To be used with view-click in conjunction with single-line `when` clauses
-fun returningTrue(action: () -> Unit) = true.also { action() }
+fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View =
+    LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)

@@ -28,18 +28,29 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
     implementation(kotlin(Deps.kotlinStdlib, KotlinCompilerVersion.VERSION))
 
+    implementation(Deps.coroutines)
+
 //    kapt(Deps.roomCompiler)
-    
+
     implementation(Deps.androidxCore)
-    implementation(Deps.androidxAppCompat)
-    implementation(Deps.androidxRecyclerView)
-    implementation(Deps.androidxConstraintLayout)
-    implementation(Deps.androidxCoordinatorLayout)
+
+    implementation(Deps.appCompat)
+    implementation(Deps.activityKtx)
+    implementation(Deps.recyclerView)
+    implementation(Deps.constraintLayout)
+    implementation(Deps.coordinatorLayout)
+
+    implementation(Deps.lifecycleRuntime)
+    implementation(Deps.lifecycleLivedata)
+    implementation(Deps.lifecycleViewModel)
 
     implementation(Deps.googleMaterial)
 

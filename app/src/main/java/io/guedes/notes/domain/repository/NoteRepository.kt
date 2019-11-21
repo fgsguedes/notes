@@ -2,11 +2,11 @@ package io.guedes.notes.domain.repository
 
 import io.guedes.notes.domain.model.Note
 
-class NoteRepository {
+object NoteRepository {
 
-    fun list(): List<Note> = TODO()
+    suspend fun list(): List<Note> = TODO()
 
-    fun create(
+    suspend fun create(
         title: String,
         content: String?
     ): Note = TODO()
