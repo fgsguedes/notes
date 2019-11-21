@@ -13,6 +13,5 @@ class ListNotesViewModel(
     val notes: LiveData<List<Note>> = liveData {
         emit(notesRepository.list())
     }
-
 }
 

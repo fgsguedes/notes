@@ -2,12 +2,13 @@ package io.guedes.notes.domain.repository
 
 import io.guedes.notes.domain.model.Note
 
-object NoteRepository {
+class NoteRepository(
+    private val noteDao: NoteDao
+) {
 
-    suspend fun list(): List<Note> = TODO()
+    suspend fun list() =
+        noteDao.list()
 
-    suspend fun create(
-        title: String,
-        content: String?
-    ): Note = TODO()
+    suspend fun create(title: String, content: String?) =
+        noteDao.insert(Note(1L, title, content))
 }
