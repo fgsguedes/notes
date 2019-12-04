@@ -30,6 +30,11 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
         initVm()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.onStart()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(
             KEY_RECYCLER_VIEW_STATE,
@@ -49,7 +54,7 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     }
 
     private fun initVm() {
-        viewModel.notes.observe(this) { adapter.submitList(it) }
+        viewModel.notes().observe(this, adapter::submitList)
     }
 
     private fun openCreateNoteForm() {
