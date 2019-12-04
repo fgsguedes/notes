@@ -6,6 +6,7 @@ import android.os.Parcelable
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.ItemTouchHelper
 import io.guedes.notes.R
 import io.guedes.notes.app.note.create.ui.CreateNoteActivity
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModel
@@ -23,6 +24,7 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     }
 
     private val adapter by lazy { NotesAdapter() }
+    private val swipeListener by lazy { HorizontalSwipeListener() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,9 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
         if (state != null) rvNotes.layoutManager?.onRestoreInstanceState(state)
 
         rvNotes.adapter = adapter
+        ItemTouchHelper(swipeListener).attachToRecyclerView(rvNotes)
+
+        swipeListener.swipeId().observe(this, viewModel::onItemSwipe)
     }
 
     private fun initVm() {

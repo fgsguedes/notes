@@ -18,20 +18,32 @@ class ListNotesViewModel(
 
     fun notes(): LiveData<List<Note>> = notes
 
-    fun onStart() = updateList()
-
-    fun onSorting() = updateList(!descending)
-
-    private fun updateList(descending: Boolean = true) {
-        this.descending = descending
-
+    fun onStart() {
         viewModelScope.launch {
-            val noteList = with(notesRepository.list()) {
-                if (descending) sortedByDescending { it.id }
-                else sortedBy { it.id }
-            }
-
-            notes.postValue(noteList)
+            updateList()
         }
+    }
+
+    fun onSorting() {
+        this.descending = !descending
+        viewModelScope.launch {
+            updateList()
+        }
+    }
+
+    fun onItemSwipe(noteId: Long) {
+        viewModelScope.launch {
+            notesRepository.delete(noteId)
+            updateList()
+        }
+    }
+
+    private suspend fun updateList() {
+        val noteList = with(notesRepository.list()) {
+            if (descending) sortedByDescending { it.id }
+            else sortedBy { it.id }
+        }
+
+        notes.postValue(noteList)
     }
 }

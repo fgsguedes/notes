@@ -10,4 +10,7 @@ class NoteRepository(
 
     suspend fun create(title: String, content: String?) =
         noteDao.insert(Note(title, content))
+
+    suspend fun delete(noteId: Long) =
+        noteDao.delete(noteId)
 }

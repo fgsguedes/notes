@@ -13,4 +13,7 @@ interface NoteDao {
 
     @Insert
     suspend fun insert(note: Note)
+
+    @Query("delete from Note where id = :noteId")
+    suspend fun delete(noteId: Long)
 }

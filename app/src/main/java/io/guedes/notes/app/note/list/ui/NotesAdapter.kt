@@ -9,6 +9,10 @@ import io.guedes.notes.domain.model.Note
 
 class NotesAdapter : ListAdapter<Note, NotesViewHolder>(NoteDiff) {
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -18,6 +22,8 @@ class NotesAdapter : ListAdapter<Note, NotesViewHolder>(NoteDiff) {
         holder: NotesViewHolder,
         position: Int
     ) = holder.bind(getItem(position))
+
+    override fun getItemId(position: Int) = getItem(position).id
 }
 
 object NoteDiff : DiffUtil.ItemCallback<Note>() {
