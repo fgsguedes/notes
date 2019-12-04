@@ -8,7 +8,7 @@ import io.guedes.notes.domain.model.Note
 @Dao
 interface NoteDao {
 
-    @Query("select * from Note order by id desc")
+    @Query("select * from Note")
     suspend fun list(): List<Note>
 
     @Insert

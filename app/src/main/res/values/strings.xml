@@ -2,6 +2,8 @@
     <string name="app_name">Notes</string>
     <string name="create_note">Create note</string>
 
+    <string name="sorting">Sorting</string>
+
     <string name="hint_note_title">Title</string>
     <string name="hint_note_content">Content</string>
 

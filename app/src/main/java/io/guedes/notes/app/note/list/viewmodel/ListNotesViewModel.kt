@@ -13,11 +13,25 @@ class ListNotesViewModel(
 ) : ViewModel() {
 
     private val notes: MutableLiveData<List<Note>> = MutableLiveData()
+
+    private var descending = true
+
     fun notes(): LiveData<List<Note>> = notes
 
-    fun onStart() {
+    fun onStart() = updateList()
+
+    fun onSorting() = updateList(!descending)
+
+    private fun updateList(descending: Boolean = true) {
+        this.descending = descending
+
         viewModelScope.launch {
-            notes.postValue(notesRepository.list())
+            val noteList = with(notesRepository.list()) {
+                if (descending) sortedByDescending { it.id }
+                else sortedBy { it.id }
+            }
+
+            notes.postValue(noteList)
         }
     }
 }

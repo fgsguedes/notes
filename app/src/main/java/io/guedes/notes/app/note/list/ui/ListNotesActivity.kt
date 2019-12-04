@@ -12,6 +12,7 @@ import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModel
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModelFactory
 import io.guedes.notes.dependencies.provideFactory
 import kotlinx.android.synthetic.main.activity_list_notes.fabCreateNote
+import kotlinx.android.synthetic.main.activity_list_notes.ivSorting
 import kotlinx.android.synthetic.main.activity_list_notes.rvNotes
 import kotlinx.android.synthetic.main.activity_list_notes.toolbar
 
@@ -45,6 +46,8 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
 
     private fun initUi(bundle: Bundle?) {
         setSupportActionBar(toolbar)
+
+        ivSorting.setOnClickListener { viewModel.onSorting() }
         fabCreateNote.setOnClickListener { openCreateNoteForm() }
 
         val state = bundle?.getParcelable<Parcelable>(KEY_RECYCLER_VIEW_STATE)
