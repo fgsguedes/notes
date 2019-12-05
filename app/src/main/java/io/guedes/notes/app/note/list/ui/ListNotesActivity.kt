@@ -7,11 +7,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import io.guedes.notes.R
 import io.guedes.notes.app.note.create.ui.CreateNoteActivity
+import io.guedes.notes.app.note.list.viewmodel.ListNotesState
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModel
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModelFactory
 import io.guedes.notes.dependencies.provideFactory
+import kotlinx.android.synthetic.main.activity_list_notes.clListNotes
 import kotlinx.android.synthetic.main.activity_list_notes.fabCreateNote
 import kotlinx.android.synthetic.main.activity_list_notes.ivSorting
 import kotlinx.android.synthetic.main.activity_list_notes.rvNotes
@@ -25,6 +28,11 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
 
     private val adapter by lazy { NotesAdapter() }
     private val swipeListener by lazy { HorizontalSwipeListener() }
+
+    private val undoSnackBar by lazy {
+        Snackbar.make(clListNotes, "Deleted", Snackbar.LENGTH_INDEFINITE)
+            .setAction("Undo") { viewModel.onUndoDelete() }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +57,7 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     private fun initUi(bundle: Bundle?) {
         setSupportActionBar(toolbar)
 
-        ivSorting.setOnClickListener { viewModel.onSorting() }
+        ivSorting.setOnClickListener { viewModel.onUpdateSorting() }
         fabCreateNote.setOnClickListener { openCreateNoteForm() }
 
         val state = bundle?.getParcelable<Parcelable>(KEY_RECYCLER_VIEW_STATE)
@@ -62,7 +70,22 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     }
 
     private fun initVm() {
-        viewModel.notes().observe(this, adapter::submitList)
+        viewModel.state().observe(this, ::onNewState)
+    }
+
+    private fun onNewState(state: ListNotesState) {
+        adapter.submitList(state.notes)
+
+        if (state.undoDeletionAvailable) showUndoSnackbar()
+        else hideUndoSnackbar()
+    }
+
+    private fun showUndoSnackbar() {
+        undoSnackBar.show()
+    }
+
+    private fun hideUndoSnackbar() {
+        undoSnackBar.dismiss()
     }
 
     private fun openCreateNoteForm() {
