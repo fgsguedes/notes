@@ -17,9 +17,9 @@ class CreateNoteViewModel(
 
     fun doneClicked(title: String, content: String) {
 
-        if (title.isNotBlank() && content.isNotBlank()) {
+        if (title.isNotBlank()) {
             viewModelScope.launch {
-                noteRepository.create(title, content)
+                noteRepository.create(title, content.takeIf { it.isNotBlank() })
                 result.postValue(Result.CREATED)
             }
 

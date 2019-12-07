@@ -1,5 +1,6 @@
 package io.guedes.notes.app.note.create.ui
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -49,7 +50,10 @@ class CreateNoteActivity : AppCompatActivity(R.layout.activity_create_note) {
 
     private fun handleResult(result: CreateNoteViewModel.Result) {
         when (result) {
-            CREATED -> finish()
+            CREATED -> {
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
             INVALID -> showValidationSnackbar()
         }
     }

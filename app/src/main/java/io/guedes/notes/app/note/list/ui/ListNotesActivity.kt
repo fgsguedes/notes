@@ -1,5 +1,6 @@
 package io.guedes.notes.app.note.list.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -19,7 +20,11 @@ import kotlinx.android.synthetic.main.activity_list_notes.fabCreateNote
 import kotlinx.android.synthetic.main.activity_list_notes.ivSorting
 import kotlinx.android.synthetic.main.activity_list_notes.rvNotes
 import kotlinx.android.synthetic.main.activity_list_notes.toolbar
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
 
     private val viewModel: ListNotesViewModel by viewModels {
@@ -41,17 +46,18 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
         initVm()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.onStart()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(
             KEY_RECYCLER_VIEW_STATE,
             rvNotes.layoutManager?.onSaveInstanceState()
         )
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == createNoteRequestCode && resultCode == Activity.RESULT_OK) {
+            viewModel.onNoteCreated()
+        } else super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun initUi(bundle: Bundle?) {
@@ -90,10 +96,11 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
 
     private fun openCreateNoteForm() {
         val intent = Intent(this, CreateNoteActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, createNoteRequestCode)
     }
 
     companion object {
+        const val createNoteRequestCode = 1
         const val KEY_RECYCLER_VIEW_STATE = "KEY_RECYCLER_VIEW_STATE"
     }
 }

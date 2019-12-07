@@ -8,12 +8,15 @@ import io.guedes.notes.domain.model.Note
 @Dao
 interface NoteDao {
 
-    @Query("select * from Note")
-    suspend fun list(): List<Note>
-
     @Insert
     suspend fun insert(note: Note)
 
-    @Query("delete from Note where id = :noteId")
+    @Query("select * from Note where deleted = 0")
+    suspend fun list(): List<Note>
+
+    @Query("update Note set deleted = 1 where id = :noteId")
     suspend fun delete(noteId: Long)
+
+    @Query("update Note set deleted = 0 where id = :noteId")
+    suspend fun restore(noteId: Long)
 }

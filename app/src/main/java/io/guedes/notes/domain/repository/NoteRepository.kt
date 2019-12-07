@@ -11,6 +11,7 @@ class NoteRepository(
     suspend fun create(title: String, content: String?) =
         noteDao.insert(Note(title, content))
 
-    suspend fun delete(noteId: Long) =
-        noteDao.delete(noteId)
+    suspend fun delete(noteId: Long) = noteDao.delete(noteId)
+
+    suspend fun restore(noteId: Long) = noteDao.restore(noteId)
 }

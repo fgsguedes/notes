@@ -12,5 +12,6 @@ data class Note(
     val title: String,
     val content: String? = null,
     val remindOn: Date? = null,
+    val deleted: Boolean = false,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) : Parcelable

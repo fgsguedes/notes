@@ -6,78 +6,155 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.guedes.notes.domain.model.Note
 import io.guedes.notes.domain.repository.NoteRepository
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 
+sealed class Action {
+    object Init : Action()
+    object InvertSorting : Action()
+    data class Delete(val noteId: Long) : Action()
+    data class UndoDelete(val noteId: Long) : Action()
+    object NoteCreated : Action()
+}
+
+sealed class Result {
+    data class Fetch(val notes: List<Note>) : Result()
+    object InvertSorting : Result()
+    data class DeleteInProgress(val noteId: Long) : Result()
+    data class DeleteCompleted(val noteId: Long) : Result()
+    object DeleteCanceled : Result()
+}
+
+@FlowPreview
+@ExperimentalCoroutinesApi
 class ListNotesViewModel(
     private val notesRepository: NoteRepository
 ) : ViewModel() {
 
-    private var currentState = ListNotesState()
+    private var currentState: ListNotesState = ListNotesState()
     private val state: MutableLiveData<ListNotesState> = MutableLiveData()
+    private val actions: Channel<Action> = Channel(Channel.Factory.CONFLATED)
 
-    private var deleteJob: Job? = null
+    init {
+        viewModelScope.launch {
+            actions.offer(Action.Init)
+
+            process(actions.consumeAsFlow())
+                .scan(currentState) { state, result -> reduce(state, result) }
+                .collect { state.postValue(it) }
+        }
+    }
 
     fun state(): LiveData<ListNotesState> = state
 
-    fun onStart() = fetchNotes()
-
     fun onUpdateSorting() {
-        viewModelScope.launch {
-            currentState.update {
-                it.copy(
-                    notes = it.notes.sorted(!it.descendingSort),
-                    descendingSort = !it.descendingSort
-                )
-            }
-        }
+        actions.offer(Action.InvertSorting)
     }
 
     fun onItemSwipe(noteId: Long) {
-        deleteJob = viewModelScope.launch {
-            currentState.update { state ->
-                state.copy(
-                    notes = state.notes.filterNot { it.id == noteId },
-                    undoDeletionAvailable = true
-                )
-            }
-            delay(5000)
-            currentState.update { it.copy(undoDeletionAvailable = false) }
-            notesRepository.delete(noteId)
-        }
+        actions.offer(Action.Delete(noteId))
     }
 
     fun onUndoDelete() {
-        deleteJob?.cancel()
-        fetchNotes()
+        actions.offer(Action.UndoDelete(currentState.deleteInProgress))
     }
 
-    private fun fetchNotes() {
-        viewModelScope.launch {
-            currentState.update {
-                it.copy(
-                    notes = notesRepository.list()
-                        .sorted(currentState.descendingSort)
-                )
+    fun onNoteCreated() {
+        actions.offer(Action.NoteCreated)
+    }
+
+    private suspend fun process(actions: Flow<Action>): Flow<Result> =
+        actions.flatMapMerge { action ->
+            when (action) {
+                Action.Init -> onInitAction()
+                Action.InvertSorting -> onInvertSortingAction()
+                is Action.Delete -> onDeleteAction(action.noteId)
+                is Action.UndoDelete -> onUndoDeleteAction(action.noteId)
+                Action.NoteCreated -> onNoteCreatedAction()
             }
         }
+
+    private fun reduce(state: ListNotesState, result: Result) =
+        when (result) {
+            is Result.Fetch -> onFetchResult(state, result.notes)
+            Result.InvertSorting -> onSortingResult(state)
+            is Result.DeleteInProgress -> onDeleteInProgressResult(state, result.noteId)
+            is Result.DeleteCompleted -> onDeleteCompletedResult(state, result.noteId)
+            Result.DeleteCanceled -> onDeleteCanceledResult(state)
+        }.also { newState -> currentState = newState }
+
+    private suspend fun onInitAction() = flow { emit(fetchNotes()) }
+
+    private suspend fun onInvertSortingAction() = flow {
+        emit(Result.InvertSorting)
     }
+
+    private suspend fun onDeleteAction(noteId: Long) = flow {
+        notesRepository.delete(noteId)
+        emit(fetchNotes())
+        emit(Result.DeleteInProgress(noteId))
+        delay(5000)
+        emit(Result.DeleteCompleted(noteId))
+    }
+
+    private suspend fun onUndoDeleteAction(noteId: Long) = flow {
+        notesRepository.restore(noteId)
+        emit(Result.DeleteCanceled)
+        emit(fetchNotes())
+    }
+
+    private suspend fun onNoteCreatedAction() = flow { emit(fetchNotes()) }
+
+    private fun onFetchResult(state: ListNotesState, notes: List<Note>) =
+        state.copy(notes = notes.sorted(state.descendingSort))
+
+    private fun onSortingResult(state: ListNotesState) =
+        state.copy(
+            notes = state.notes.sorted(!state.descendingSort),
+            descendingSort = !state.descendingSort
+        )
+
+    private fun onDeleteInProgressResult(state: ListNotesState, noteId: Long): ListNotesState {
+        return state.copy(
+            deleteInProgress = noteId,
+            undoDeletionAvailable = true
+        )
+    }
+
+    private fun onDeleteCompletedResult(state: ListNotesState, noteId: Long): ListNotesState {
+        val newDeleteInProgress = state.deleteInProgress.takeIf { it != noteId } ?: 0
+
+        return state.copy(
+            deleteInProgress = newDeleteInProgress,
+            undoDeletionAvailable = newDeleteInProgress != 0L
+        )
+    }
+
+    private fun onDeleteCanceledResult(state: ListNotesState) =
+        state.copy(
+            undoDeletionAvailable = false,
+            deleteInProgress = 0
+        )
 
     private fun List<Note>.sorted(descendingSort: Boolean): List<Note> =
         if (descendingSort) sortedByDescending { it.id }
         else sortedBy { it.id }
 
-    private inline fun ListNotesState.update(updateBlock: (ListNotesState) -> ListNotesState) {
-        updateBlock(this).also { newState ->
-            currentState = newState
-            state.postValue(newState)
-        }
-    }
+    private suspend fun fetchNotes() = Result.Fetch(notesRepository.list())
 }
 
 data class ListNotesState(
     val notes: List<Note> = emptyList(),
     val undoDeletionAvailable: Boolean = false,
-    val descendingSort: Boolean = true
+    val descendingSort: Boolean = true,
+    val deleteInProgress: Long = 0
 )
