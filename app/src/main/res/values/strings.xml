@@ -13,6 +13,6 @@
     <string name="activity_label_new_note">New note</string>
     <string name="done">Done</string>
 
-    <string name="create_note_fields_required_message">Note title and content are mandatory</string>
+    <string name="create_note_fields_required_message">Note title are mandatory</string>
     <string name="create_note_fields_required_action">OK</string>
 </resources>

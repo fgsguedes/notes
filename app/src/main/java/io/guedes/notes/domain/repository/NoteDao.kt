@@ -2,14 +2,15 @@ package io.guedes.notes.domain.repository
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.guedes.notes.domain.model.Note
 
 @Dao
 interface NoteDao {
 
-    @Insert
-    suspend fun insert(note: Note)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun save(note: Note)
 
     @Query("select * from Note where deleted = 0")
     suspend fun list(): List<Note>

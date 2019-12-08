@@ -10,7 +10,7 @@ class HorizontalSwipeListener : ItemTouchHelper.SimpleCallback(
     ItemTouchHelper.START or ItemTouchHelper.END // Swipe direction wanted
 ) {
 
-    private val swipeId = MutableLiveData<Long>()
+    private val swipes = MutableLiveData<Long>()
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -21,7 +21,7 @@ class HorizontalSwipeListener : ItemTouchHelper.SimpleCallback(
     override fun onSwiped(
         viewHolder: RecyclerView.ViewHolder,
         direction: Int
-    ) = swipeId.postValue(viewHolder.itemId)
+    ) = swipes.postValue(viewHolder.itemId)
 
-    fun swipeId(): LiveData<Long> = swipeId
+    fun swipes(): LiveData<Long> = swipes
 }
