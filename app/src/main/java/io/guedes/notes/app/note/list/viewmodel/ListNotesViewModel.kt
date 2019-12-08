@@ -24,22 +24,18 @@ import kotlinx.coroutines.launch
 
 sealed class Action {
     object Init : Action()
-    object CreateNote : Action()
     object NoteCreated : Action()
-    object InvertSorting : Action()
-    data class Click(val note: Note) : Action()
+    data class InvertSorting(val descendingSort: Boolean) : Action()
     data class Delete(val noteId: Long) : Action()
     data class UndoDelete(val noteId: Long) : Action()
 }
 
 sealed class Result {
     data class Fetch(val notes: List<Note>) : Result()
-    object CreateNote : Result()
-    object InvertSorting : Result()
+    data class InvertSorting(val descendingSort: Boolean) : Result()
     data class DeleteInProgress(val noteId: Long) : Result()
     data class DeleteCompleted(val noteId: Long) : Result()
     object DeleteCanceled : Result()
-    data class EditNote(val note: Note) : Result()
 }
 
 sealed class Navigation {
@@ -76,7 +72,7 @@ class ListNotesViewModel(
     fun navigation(): LiveData<Navigation> = navigation
 
     fun onCreateNote() {
-        actions.offer(Action.CreateNote)
+        navigation.postValue(Navigation.NoteForm(note = null))
     }
 
     fun onNoteCreated() {
@@ -84,11 +80,11 @@ class ListNotesViewModel(
     }
 
     fun onNoteClick(note: Note) {
-        actions.offer(Action.Click(note))
+        navigation.postValue(Navigation.NoteForm(note))
     }
 
     fun onUpdateSorting() {
-        actions.offer(Action.InvertSorting)
+        actions.offer(Action.InvertSorting(currentState.descendingSort))
     }
 
     fun onItemSwipe(noteId: Long) {
@@ -102,10 +98,8 @@ class ListNotesViewModel(
     private fun process(action: Action): Flow<Result> =
         when (action) {
             Action.Init -> onInitAction()
-            Action.CreateNote -> onCreateNoteAction()
             Action.NoteCreated -> onNoteCreatedAction()
-            Action.InvertSorting -> onInvertSortingAction()
-            is Action.Click -> onClickAction(action.note)
+            is Action.InvertSorting -> onInvertSortingAction(action.descendingSort)
             is Action.Delete -> onDeleteAction(action.noteId)
             is Action.UndoDelete -> onUndoDeleteAction(action.noteId)
         }
@@ -113,27 +107,17 @@ class ListNotesViewModel(
     private fun reduce(state: ListNotesState, result: Result): ListNotesState =
         when (result) {
             is Result.Fetch -> onFetchResult(state, result.notes)
-            Result.CreateNote -> onCreateNoteResult(state)
-            Result.InvertSorting -> onSortingResult(state)
+            is Result.InvertSorting -> onSortingResult(state, result.descendingSort)
             is Result.DeleteInProgress -> onDeleteInProgressResult(state, result.noteId)
             is Result.DeleteCompleted -> onDeleteCompletedResult(state, result.noteId)
             Result.DeleteCanceled -> onDeleteCanceledResult(state)
-            is Result.EditNote -> onEditNoteResult(state, result.note)
         }
 
     // region Actions
     private fun onInitAction() = flow { emit(fetchNotes()) }
 
-    private fun onCreateNoteAction() = flow {
-        emit(Result.CreateNote)
-    }
-
-    private fun onInvertSortingAction() = flow {
-        emit(Result.InvertSorting)
-    }
-
-    private fun onClickAction(note: Note) = flow {
-        emit(Result.EditNote(note))
+    private fun onInvertSortingAction(descendingSort: Boolean) = flow {
+        emit(Result.InvertSorting(!descendingSort))
     }
 
     private fun onDeleteAction(noteId: Long) = flow {
@@ -157,14 +141,10 @@ class ListNotesViewModel(
     private fun onFetchResult(state: ListNotesState, notes: List<Note>) =
         state.copy(notes = notes.sorted(state.descendingSort))
 
-    private fun onCreateNoteResult(state: ListNotesState) = state.also {
-        navigation.postValue(Navigation.NoteForm(note = null))
-    }
-
-    private fun onSortingResult(state: ListNotesState) =
+    private fun onSortingResult(state: ListNotesState, descendingSort: Boolean) =
         state.copy(
-            notes = state.notes.sorted(!state.descendingSort),
-            descendingSort = !state.descendingSort
+            notes = state.notes.sorted(descendingSort),
+            descendingSort = descendingSort
         )
 
     private fun onDeleteInProgressResult(state: ListNotesState, noteId: Long): ListNotesState {
@@ -188,10 +168,6 @@ class ListNotesViewModel(
             undoDeletionAvailable = false,
             deleteInProgress = 0
         )
-
-    private fun onEditNoteResult(state: ListNotesState, note: Note) = state.also {
-        navigation.postValue(Navigation.NoteForm(note))
-    }
     // endregion
 
     private fun List<Note>.sorted(descendingSort: Boolean): List<Note> =
