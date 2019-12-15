@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
-
 plugins {
     id("com.android.application")
     id("com.getkeepsafe.dexcount")
@@ -13,7 +11,7 @@ android {
     buildToolsVersion(Version.buildTools)
 
     defaultConfig {
-        applicationId = "io.guedes.notes"
+        applicationId = "io.guedes.notes.app"
 
         minSdkVersion(Version.minSdk)
         targetSdkVersion(Version.targetSdk)
@@ -28,13 +26,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
 }
 
 dependencies {
-    implementation(kotlin(Deps.kotlinStdlib, KotlinCompilerVersion.VERSION))
+    implementation(kotlin(Deps.kotlinStdlib))
+
+    implementation(project(":domain"))
+    implementation(project(":architecture"))
 
     implementation(Deps.coroutines)
 

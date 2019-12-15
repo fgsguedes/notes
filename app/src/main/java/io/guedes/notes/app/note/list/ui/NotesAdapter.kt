@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import io.guedes.notes.R
+import io.guedes.notes.app.R
 import io.guedes.notes.app.common.inflate
 import io.guedes.notes.domain.model.Note
 

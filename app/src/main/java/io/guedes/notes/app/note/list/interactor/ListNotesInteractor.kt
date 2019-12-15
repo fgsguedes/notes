@@ -1,6 +1,6 @@
 package io.guedes.notes.app.note.list.interactor
 
-import io.guedes.notes.app.arch.BaseInteractor
+import io.guedes.notes.arch.BaseInteractor
 import io.guedes.notes.domain.repository.NoteRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

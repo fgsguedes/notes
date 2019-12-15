@@ -1,4 +1,4 @@
-package io.guedes.notes.domain.repository
+package io.guedes.notes.domain.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -1,4 +1,4 @@
-package io.guedes.notes.app.arch
+package io.guedes.notes.arch
 
 interface BaseAction
 interface BaseResult

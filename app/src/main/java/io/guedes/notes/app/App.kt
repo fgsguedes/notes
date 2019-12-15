@@ -2,7 +2,7 @@ package io.guedes.notes.app
 
 import android.app.Application
 import androidx.room.Room
-import io.guedes.notes.domain.repository.AppDatabase
+import io.guedes.notes.domain.database.AppDatabase
 import io.guedes.notes.domain.repository.NoteRepository
 import timber.log.Timber
 

@@ -1,5 +1,24 @@
+object Version {
+    const val kotlin = "1.3.61"
+
+    const val gradle = "6.0.1"
+
+    const val versionCode = 1
+    const val versionName = "0.0.1"
+
+    const val compileSdk = 29
+    const val buildTools = "29.0.2"
+
+    const val minSdk = 21
+    const val targetSdk = 29
+}
+
 object Deps {
-    const val kotlinStdlib = "stdlib-jdk7"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.3"
+    const val kotlinGradlePlugin = "gradle-plugin"
+    const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
+
+    const val kotlinStdlib = "stdlib-jdk8"
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3"
 

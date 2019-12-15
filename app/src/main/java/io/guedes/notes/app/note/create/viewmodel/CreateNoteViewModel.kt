@@ -1,7 +1,7 @@
 package io.guedes.notes.app.note.create.viewmodel
 
-import io.guedes.notes.app.arch.BaseViewModel
 import io.guedes.notes.app.note.create.interactor.CreateNoteInteractor
+import io.guedes.notes.arch.BaseViewModel
 import io.guedes.notes.domain.model.Note
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

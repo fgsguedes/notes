@@ -1,4 +1,4 @@
-package io.guedes.notes.app.arch
+package io.guedes.notes.arch
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

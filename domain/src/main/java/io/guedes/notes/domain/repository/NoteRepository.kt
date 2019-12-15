@@ -1,5 +1,6 @@
 package io.guedes.notes.domain.repository
 
+import io.guedes.notes.domain.dao.NoteDao
 import io.guedes.notes.domain.model.Note
 
 class NoteRepository(

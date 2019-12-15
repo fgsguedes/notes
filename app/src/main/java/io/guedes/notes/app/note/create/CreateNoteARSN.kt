@@ -1,9 +1,9 @@
 package io.guedes.notes.app.note.create
 
-import io.guedes.notes.app.arch.BaseAction
-import io.guedes.notes.app.arch.BaseNavigation
-import io.guedes.notes.app.arch.BaseResult
-import io.guedes.notes.app.arch.BaseState
+import io.guedes.notes.arch.BaseAction
+import io.guedes.notes.arch.BaseNavigation
+import io.guedes.notes.arch.BaseResult
+import io.guedes.notes.arch.BaseState
 import io.guedes.notes.domain.model.Note
 
 sealed class CreateNoteAction : BaseAction {
