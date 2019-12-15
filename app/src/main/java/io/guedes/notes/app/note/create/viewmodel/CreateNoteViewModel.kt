@@ -1,27 +1,18 @@
 package io.guedes.notes.app.note.create.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import io.guedes.notes.app.arch.BaseAction
+import io.guedes.notes.app.arch.BaseNavigation
+import io.guedes.notes.app.arch.BaseResult
+import io.guedes.notes.app.arch.BaseState
+import io.guedes.notes.app.arch.BaseViewModel
 import io.guedes.notes.domain.model.Note
 import io.guedes.notes.domain.repository.NoteRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.scan
-import kotlinx.coroutines.launch
 
-sealed class Action {
+sealed class Action : BaseAction {
     data class Init(val note: Note?) : Action()
 
     data class InputChanged(
@@ -31,14 +22,14 @@ sealed class Action {
     ) : Action()
 }
 
-sealed class Result {
+sealed class Result : BaseResult {
     data class InitResult(val noteId: Long) : Result()
     data class InputChanged(val title: String, val content: String?) : Result()
     data class Validation(val isValid: Boolean) : Result()
     object NoteCreated : Result()
 }
 
-sealed class Navigation {
+sealed class Navigation : BaseNavigation {
     object Finish : Navigation()
 }
 
@@ -47,43 +38,24 @@ sealed class Navigation {
 class CreateNoteViewModel(
     private val noteRepository: NoteRepository,
     note: Note?
-) : ViewModel() {
-
-    private var currentState = CreateNoteState()
-    private val state = MutableLiveData<CreateNoteState>()
-    private val navigation = MutableLiveData<Navigation>()
-
-    private val actions = Channel<Action>(Channel.CONFLATED)
+) : BaseViewModel<Action, Result, CreateNoteState, Navigation>(CreateNoteState()) {
 
     init {
-        viewModelScope.launch {
-            actions.offer(Action.Init(note))
-
-            actions.consumeAsFlow()
-                .flatMapMerge { process(it) }
-                .scan(currentState) { state, result -> reduce(state, result) }
-                .filter { newState -> currentState != newState }
-                .onEach { newState -> currentState = newState }
-                .flowOn(Dispatchers.Default)
-                .collect { state.postValue(it) }
-        }
+        actions.offer(Action.Init(note))
     }
-
-    fun state(): LiveData<CreateNoteState> = state
-    fun navigation(): LiveData<Navigation> = navigation
 
     fun onSave(title: String, content: String) {
         actions.offer(Action.InputChanged(currentState.noteId, title, content))
     }
 
-    private fun process(action: Action) =
+    override fun process(action: Action) =
         when (action) {
             is Action.Init -> onInitAction(action.note)
             is Action.InputChanged ->
                 onInputChangedAction(action.noteId, action.title, action.content)
         }
 
-    private fun reduce(state: CreateNoteState, result: Result) =
+    override fun reduce(state: CreateNoteState, result: Result) =
         when (result) {
             is Result.InitResult -> onInitResult(state, result.noteId)
             is Result.InputChanged -> onInputChangedResult(state, result.title, result.content)
@@ -130,7 +102,7 @@ class CreateNoteViewModel(
         state.copy(inputValid = isValid)
 
     private fun onNoteCreatedResult(state: CreateNoteState) = state.also {
-        navigation.postValue(Navigation.Finish)
+        navigation.offer(Navigation.Finish)
     }
     // endregion
 }
@@ -140,4 +112,4 @@ data class CreateNoteState(
     val title: String = "",
     val content: String? = null,
     val inputValid: Boolean = true
-)
+) : BaseState

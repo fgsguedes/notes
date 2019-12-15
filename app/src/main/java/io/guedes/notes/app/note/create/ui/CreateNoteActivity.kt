@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.observe
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.guedes.notes.R
 import io.guedes.notes.app.common.stringText
@@ -22,6 +22,8 @@ import kotlinx.android.synthetic.main.activity_create_note.ivCreateNote
 import kotlinx.android.synthetic.main.activity_create_note.toolbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -51,8 +53,10 @@ class CreateNoteActivity : AppCompatActivity(R.layout.activity_create_note) {
     }
 
     private fun initVm() {
-        viewModel.state().observe(this, ::onStateChanged)
-        viewModel.navigation().observe(this, ::onNavigate)
+        lifecycleScope.launch {
+            launch { viewModel.state().collect { onStateChanged(it) } }
+            launch { viewModel.navigation().collect { onNavigate(it) } }
+        }
     }
 
     private fun onStateChanged(state: CreateNoteState) {

@@ -1,7 +1,7 @@
 object Deps {
     const val kotlinStdlib = "stdlib-jdk7"
 
-    const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
+    const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3"
 
     const val androidxCore = "androidx.core:core-ktx:1.1.0"
 

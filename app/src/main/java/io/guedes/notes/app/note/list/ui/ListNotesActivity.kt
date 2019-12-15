@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
@@ -24,6 +25,8 @@ import kotlinx.android.synthetic.main.activity_list_notes.rvNotes
 import kotlinx.android.synthetic.main.activity_list_notes.toolbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -36,6 +39,7 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     private val adapter by lazy { NotesAdapter() }
     private val swipeListener by lazy { HorizontalSwipeListener() }
 
+    private var deleteInProgress: Long? = null
     private var undoSnackBar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,14 +80,16 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     }
 
     private fun initVm() {
-        viewModel.state().observe(this, ::onStateChanged)
-        viewModel.navigation().observe(this, ::onNavigation)
+        lifecycleScope.launch {
+            launch { viewModel.state().collect { onStateChanged(it) } }
+            launch { viewModel.navigation().collect { onNavigation(it) } }
+        }
     }
 
     private fun onStateChanged(state: ListNotesState) {
         adapter.submitList(state.notes)
 
-        if (state.undoDeletionAvailable) showUndoSnackbar()
+        if (state.undoDeletionAvailable) showUndoSnackbar(state.deleteInProgress)
         else hideUndoSnackbar()
     }
 
@@ -91,7 +97,11 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
         is Navigation.NoteForm -> openCreateNoteForm(navigation.note)
     }
 
-    private fun showUndoSnackbar() {
+    private fun showUndoSnackbar(deleteInProgress: Long) {
+        if (this.deleteInProgress == deleteInProgress) return
+
+        this.deleteInProgress = deleteInProgress
+
         undoSnackBar?.dismiss()
         undoSnackBar = Snackbar.make(clListNotes, "Deleted", Snackbar.LENGTH_INDEFINITE)
             .setAction("Undo") { viewModel.onUndoDelete() }
@@ -99,6 +109,7 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     }
 
     private fun hideUndoSnackbar() {
+        deleteInProgress = null
         undoSnackBar?.dismiss()
     }
 

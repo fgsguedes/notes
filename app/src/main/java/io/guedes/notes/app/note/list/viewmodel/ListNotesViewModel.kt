@@ -1,28 +1,19 @@
 package io.guedes.notes.app.note.list.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import io.guedes.notes.app.arch.BaseAction
+import io.guedes.notes.app.arch.BaseNavigation
+import io.guedes.notes.app.arch.BaseResult
+import io.guedes.notes.app.arch.BaseState
+import io.guedes.notes.app.arch.BaseViewModel
 import io.guedes.notes.domain.model.Note
 import io.guedes.notes.domain.repository.NoteRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.scan
-import kotlinx.coroutines.launch
 
-sealed class Action {
+sealed class Action : BaseAction {
     object Init : Action()
     object NoteCreated : Action()
     data class InvertSorting(val descendingSort: Boolean) : Action()
@@ -30,7 +21,7 @@ sealed class Action {
     data class UndoDelete(val noteId: Long) : Action()
 }
 
-sealed class Result {
+sealed class Result : BaseResult {
     data class Fetch(val notes: List<Note>) : Result()
     data class InvertSorting(val descendingSort: Boolean) : Result()
     data class DeleteInProgress(val noteId: Long) : Result()
@@ -38,7 +29,7 @@ sealed class Result {
     object DeleteCanceled : Result()
 }
 
-sealed class Navigation {
+sealed class Navigation : BaseNavigation {
     data class NoteForm(val note: Note?) : Navigation()
 }
 
@@ -46,33 +37,14 @@ sealed class Navigation {
 @ExperimentalCoroutinesApi
 class ListNotesViewModel(
     private val notesRepository: NoteRepository
-) : ViewModel() {
-
-    private var currentState: ListNotesState = ListNotesState()
-    private val state: MutableLiveData<ListNotesState> = MutableLiveData()
-    private val navigation: MutableLiveData<Navigation> = MutableLiveData()
-
-    private val actions: Channel<Action> = Channel(Channel.Factory.CONFLATED)
+) : BaseViewModel<Action, Result, ListNotesState, Navigation>(ListNotesState()) {
 
     init {
-        viewModelScope.launch {
-            actions.offer(Action.Init)
-
-            actions.consumeAsFlow()
-                .flatMapMerge { process(it) }
-                .scan(currentState) { state, result -> reduce(state, result) }
-                .filter { newState -> currentState != newState }
-                .onEach { newState -> currentState = newState }
-                .flowOn(Dispatchers.Default)
-                .collect { state.postValue(it) }
-        }
+        actions.offer(Action.Init)
     }
 
-    fun state(): LiveData<ListNotesState> = state
-    fun navigation(): LiveData<Navigation> = navigation
-
     fun onCreateNote() {
-        navigation.postValue(Navigation.NoteForm(note = null))
+        navigation.offer(Navigation.NoteForm(note = null))
     }
 
     fun onNoteCreated() {
@@ -80,7 +52,7 @@ class ListNotesViewModel(
     }
 
     fun onNoteClick(note: Note) {
-        navigation.postValue(Navigation.NoteForm(note))
+        navigation.offer(Navigation.NoteForm(note))
     }
 
     fun onUpdateSorting() {
@@ -95,7 +67,7 @@ class ListNotesViewModel(
         actions.offer(Action.UndoDelete(currentState.deleteInProgress))
     }
 
-    private fun process(action: Action): Flow<Result> =
+    override fun process(action: Action): Flow<Result> =
         when (action) {
             Action.Init -> onInitAction()
             Action.NoteCreated -> onNoteCreatedAction()
@@ -104,7 +76,7 @@ class ListNotesViewModel(
             is Action.UndoDelete -> onUndoDeleteAction(action.noteId)
         }
 
-    private fun reduce(state: ListNotesState, result: Result): ListNotesState =
+    override fun reduce(state: ListNotesState, result: Result): ListNotesState =
         when (result) {
             is Result.Fetch -> onFetchResult(state, result.notes)
             is Result.InvertSorting -> onSortingResult(state, result.descendingSort)
@@ -182,4 +154,4 @@ data class ListNotesState(
     val undoDeletionAvailable: Boolean = false,
     val descendingSort: Boolean = true,
     val deleteInProgress: Long = 0
-)
+) : BaseState
