@@ -9,15 +9,9 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
-
-interface BaseAction
-interface BaseResult
-interface BaseState
-interface BaseNavigation
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -25,8 +19,7 @@ abstract class BaseViewModel<A : BaseAction, R : BaseResult, S : BaseState, N : 
     initialState: S
 ) : ViewModel() {
 
-    protected val actions = ConflatedBroadcastChannel<A>()
-    protected val navigation = ConflatedBroadcastChannel<N>()
+    protected val navigator = ConflatedBroadcastChannel<N>()
 
     private val state = ConflatedBroadcastChannel(initialState)
 
@@ -34,18 +27,16 @@ abstract class BaseViewModel<A : BaseAction, R : BaseResult, S : BaseState, N : 
         get() = state.value
 
     fun state(): Flow<S> = state.asFlow()
-    fun navigation(): Flow<N> = navigation.asFlow()
+    fun navigation(): Flow<N> = navigator.asFlow()
 
-    init {
+    fun observe(results: Flow<R>) {
         viewModelScope.launch {
-            actions.asFlow()
-                .flatMapMerge { process(it) }
+            results
                 .scan(state.value) { state, result -> reduce(state, result) }
                 .flowOn(Dispatchers.Default)
                 .collect { state.offer(it) }
         }
     }
 
-    protected abstract fun process(action: A): Flow<R>
     protected abstract fun reduce(state: S, result: R): S
 }

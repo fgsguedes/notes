@@ -12,10 +12,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import io.guedes.notes.R
 import io.guedes.notes.app.note.create.ui.CreateNoteActivity
-import io.guedes.notes.app.note.list.viewmodel.ListNotesState
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModel
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModelFactory
-import io.guedes.notes.app.note.list.viewmodel.Navigation
 import io.guedes.notes.dependencies.provideFactory
 import io.guedes.notes.domain.model.Note
 import kotlinx.android.synthetic.main.activity_list_notes.clListNotes
@@ -27,6 +25,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import io.guedes.notes.app.note.list.ListNotesNavigation as Navigation
+import io.guedes.notes.app.note.list.ListNotesState as State
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -86,7 +86,7 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
         }
     }
 
-    private fun onStateChanged(state: ListNotesState) {
+    private fun onStateChanged(state: State) {
         adapter.submitList(state.notes)
 
         if (state.undoDeletionAvailable) showUndoSnackbar(state.deleteInProgress)

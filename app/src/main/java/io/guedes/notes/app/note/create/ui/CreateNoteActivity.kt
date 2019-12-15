@@ -9,10 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.guedes.notes.R
 import io.guedes.notes.app.common.stringText
-import io.guedes.notes.app.note.create.viewmodel.CreateNoteState
 import io.guedes.notes.app.note.create.viewmodel.CreateNoteViewModel
 import io.guedes.notes.app.note.create.viewmodel.CreateNoteViewModelFactory
-import io.guedes.notes.app.note.create.viewmodel.Navigation
 import io.guedes.notes.dependencies.provideFactory
 import io.guedes.notes.domain.model.Note
 import kotlinx.android.synthetic.main.activity_create_note.createNoteRootView
@@ -24,6 +22,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import io.guedes.notes.app.note.create.CreateNoteNavigation as Navigation
+import io.guedes.notes.app.note.create.CreateNoteState as State
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -59,7 +59,7 @@ class CreateNoteActivity : AppCompatActivity(R.layout.activity_create_note) {
         }
     }
 
-    private fun onStateChanged(state: CreateNoteState) {
+    private fun onStateChanged(state: State) {
         etNoteTitle.setText(state.title)
         etNoteContent.setText(state.content)
 
