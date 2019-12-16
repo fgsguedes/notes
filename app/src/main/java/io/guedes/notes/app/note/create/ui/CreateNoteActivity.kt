@@ -9,9 +9,9 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.guedes.notes.app.R
 import io.guedes.notes.app.common.stringText
+import io.guedes.notes.app.dependencies.provideFactory
 import io.guedes.notes.app.note.create.viewmodel.CreateNoteViewModel
 import io.guedes.notes.app.note.create.viewmodel.CreateNoteViewModelFactory
-import io.guedes.notes.dependencies.provideFactory
 import io.guedes.notes.domain.model.Note
 import kotlinx.android.synthetic.main.activity_create_note.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi

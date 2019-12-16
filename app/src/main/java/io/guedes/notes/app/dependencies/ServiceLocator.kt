@@ -1,4 +1,4 @@
-package io.guedes.notes.dependencies
+package io.guedes.notes.app.dependencies
 
 import android.content.Context
 import android.content.Intent

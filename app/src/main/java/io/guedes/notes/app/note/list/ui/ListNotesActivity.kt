@@ -11,10 +11,10 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import io.guedes.notes.app.R
+import io.guedes.notes.app.dependencies.provideFactory
 import io.guedes.notes.app.note.create.ui.CreateNoteActivity
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModel
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModelFactory
-import io.guedes.notes.dependencies.provideFactory
 import io.guedes.notes.domain.model.Note
 import kotlinx.android.synthetic.main.activity_list_notes.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
