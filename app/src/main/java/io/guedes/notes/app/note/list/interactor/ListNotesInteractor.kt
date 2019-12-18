@@ -5,9 +5,7 @@ import io.guedes.notes.domain.repository.NoteRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import timber.log.Timber
 import io.guedes.notes.app.note.list.ListNotesAction as Action
 import io.guedes.notes.app.note.list.ListNotesResult as Result
 
@@ -17,15 +15,12 @@ class ListNotesInteractor(
     private val notesRepository: NoteRepository
 ) : BaseInteractor<Action, Result>() {
 
-    override fun process(action: Action): Flow<io.guedes.notes.app.note.list.ListNotesResult> {
-        Timber.e("Processing in ${Thread.currentThread().name}")
-        return when (action) {
-            Action.Init -> onInitAction()
-            Action.NoteCreated -> onNoteCreatedAction()
-            is Action.InvertSorting -> onInvertSortingAction(action.descendingSort)
-            is Action.Delete -> onDeleteAction(action.noteId)
-            is Action.UndoDelete -> onUndoDeleteAction(action.noteId)
-        }
+    override fun process(action: Action) = when (action) {
+        Action.Init -> onInitAction()
+        Action.NoteCreated -> onNoteCreatedAction()
+        is Action.InvertSorting -> onInvertSortingAction(action.descendingSort)
+        is Action.Delete -> onDeleteAction(action.noteId)
+        is Action.UndoDelete -> onUndoDeleteAction(action.noteId)
     }
 
     private fun onInitAction() = flow { emit(fetchNotesResult()) }

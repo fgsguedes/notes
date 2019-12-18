@@ -22,7 +22,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import io.guedes.notes.app.note.list.ListNotesNavigation as Navigation
 import io.guedes.notes.app.note.list.ListNotesState as State
 
@@ -85,7 +84,6 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     }
 
     private fun onStateChanged(state: State) {
-        Timber.e("Handling new state in ${Thread.currentThread().name}")
         adapter.submitList(state.notes)
 
         if (state.undoDeletionAvailable) showUndoSnackbar(state.deleteInProgress)
