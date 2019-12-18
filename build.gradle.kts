@@ -21,6 +21,10 @@ allprojects {
 }
 
 tasks {
+    withType<Test>().all {
+        useJUnitPlatform()
+    }
+
     wrapper {
         gradleVersion = Version.gradle
         distributionType = Wrapper.DistributionType.ALL

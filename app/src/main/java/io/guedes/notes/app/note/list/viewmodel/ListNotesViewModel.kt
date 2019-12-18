@@ -3,6 +3,8 @@ package io.guedes.notes.app.note.list.viewmodel
 import io.guedes.notes.app.note.list.interactor.ListNotesInteractor
 import io.guedes.notes.arch.BaseViewModel
 import io.guedes.notes.domain.model.Note
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import io.guedes.notes.app.note.list.ListNotesAction as Action
@@ -13,17 +15,18 @@ import io.guedes.notes.app.note.list.ListNotesState as State
 @FlowPreview
 @ExperimentalCoroutinesApi
 class ListNotesViewModel(
-    private val interactor: ListNotesInteractor
-) : BaseViewModel<Action, Result, State, Navigation>(State()) {
+    private val interactor: ListNotesInteractor,
+    dispatcher: CoroutineDispatcher = Dispatchers.Default
+) : BaseViewModel<Action, Result, State, Navigation>(State(), dispatcher) {
 
     init {
         observe(interactor.results())
         interactor.offer(Action.Init)
     }
 
-    override fun reduce(state: State, result: Result): State = when (result) {
+    override fun reduce(state: State, result: Result) = when (result) {
         is Result.Fetch -> onFetchResult(state, result.notes)
-        is Result.InvertSorting -> onSortingResult(state, result.descendingSort)
+        is Result.ChangeSorting -> onSortingResult(state, result.descendingSort)
         is Result.DeleteInProgress -> onDeleteInProgressResult(state, result.noteId)
         is Result.DeleteCompleted -> onDeleteCompletedResult(state, result.noteId)
         Result.DeleteCanceled -> onDeleteCanceledResult(state)

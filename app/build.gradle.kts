@@ -62,6 +62,10 @@ dependencies {
     implementation(Deps.timber)
 
     testImplementation(Deps.junit)
+    testImplementation(Deps.assertJ)
+    testImplementation(Deps.mockito)
+    testImplementation(Deps.mockitoKotlin)
+    testImplementation(Deps.coroutinesTest)
 
     androidTestImplementation(Deps.androidxTestRunner)
     androidTestImplementation(Deps.androidxEspressoCore)

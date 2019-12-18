@@ -16,7 +16,7 @@ sealed class ListNotesAction : BaseAction {
 
 sealed class ListNotesResult : BaseResult {
     data class Fetch(val notes: List<Note>) : ListNotesResult()
-    data class InvertSorting(val descendingSort: Boolean) : ListNotesResult()
+    data class ChangeSorting(val descendingSort: Boolean) : ListNotesResult()
     data class DeleteInProgress(val noteId: Long) : ListNotesResult()
     data class DeleteCompleted(val noteId: Long) : ListNotesResult()
     object DeleteCanceled : ListNotesResult()

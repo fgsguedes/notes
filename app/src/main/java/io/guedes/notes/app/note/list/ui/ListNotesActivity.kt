@@ -17,10 +17,12 @@ import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModel
 import io.guedes.notes.app.note.list.viewmodel.ListNotesViewModelFactory
 import io.guedes.notes.domain.model.Note
 import kotlinx.android.synthetic.main.activity_list_notes.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import io.guedes.notes.app.note.list.ListNotesNavigation as Navigation
 import io.guedes.notes.app.note.list.ListNotesState as State
 
@@ -76,13 +78,14 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     }
 
     private fun initVm() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
             launch { viewModel.state().collect { onStateChanged(it) } }
             launch { viewModel.navigation().collect { onNavigation(it) } }
         }
     }
 
     private fun onStateChanged(state: State) {
+        Timber.e("Handling new state in ${Thread.currentThread().name}")
         adapter.submitList(state.notes)
 
         if (state.undoDeletionAvailable) showUndoSnackbar(state.deleteInProgress)

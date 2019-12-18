@@ -3,6 +3,8 @@ package io.guedes.notes.app.note.create.viewmodel
 import io.guedes.notes.app.note.create.interactor.CreateNoteInteractor
 import io.guedes.notes.arch.BaseViewModel
 import io.guedes.notes.domain.model.Note
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import io.guedes.notes.app.note.create.CreateNoteAction as Action
@@ -14,8 +16,9 @@ import io.guedes.notes.app.note.create.CreateNoteState as State
 @ExperimentalCoroutinesApi
 class CreateNoteViewModel(
     private val interactor: CreateNoteInteractor,
-    note: Note?
-) : BaseViewModel<Action, Result, State, Navigation>(State()) {
+    note: Note?,
+    dispatcher: CoroutineDispatcher = Dispatchers.Default
+) : BaseViewModel<Action, Result, State, Navigation>(State(), dispatcher) {
 
     init {
         observe(interactor.results())
