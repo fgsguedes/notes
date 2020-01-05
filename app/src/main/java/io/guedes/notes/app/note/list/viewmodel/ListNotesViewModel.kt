@@ -4,7 +4,6 @@ import io.guedes.notes.app.note.list.interactor.ListNotesInteractor
 import io.guedes.notes.arch.BaseViewModel
 import io.guedes.notes.domain.model.Note
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import io.guedes.notes.app.note.list.ListNotesAction as Action
@@ -16,7 +15,7 @@ import io.guedes.notes.app.note.list.ListNotesState as State
 @ExperimentalCoroutinesApi
 class ListNotesViewModel(
     private val interactor: ListNotesInteractor,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default
+    dispatcher: CoroutineDispatcher
 ) : BaseViewModel<Action, Result, State, Navigation>(interactor, dispatcher, State()) {
 
     init {

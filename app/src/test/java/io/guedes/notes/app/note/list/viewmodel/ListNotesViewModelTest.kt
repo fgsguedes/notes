@@ -50,6 +50,11 @@ class ListNotesViewModelTest {
 
     // region Actions
     @Test
+    fun `on init Should offer Init action`() {
+        verify(interactor).offer(Action.Init)
+    }
+
+    @Test
     fun `onCreateNote Should navigate to note form without any note`() = dispatcher.runBlockingTest {
         // WHEN
         viewModel.onCreateNote()
@@ -233,6 +238,6 @@ class ListNotesViewModelTest {
     }
     // endregion
 
-    private suspend fun ListNotesViewModel.latestState(): ListNotesState = state().first()
+    private suspend fun ListNotesViewModel.latestState() = state().first()
     private suspend fun ListNotesViewModel.latestNavigation() = navigation().first()
 }
