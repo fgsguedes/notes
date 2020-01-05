@@ -1,16 +1,19 @@
 package io.guedes.notes.app.note.list.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.consumeAsFlow
 
+@FlowPreview
 class HorizontalSwipeListener : ItemTouchHelper.SimpleCallback(
     0, // Disables drag&drop
     ItemTouchHelper.START or ItemTouchHelper.END // Swipe direction wanted
 ) {
 
-    private val swipes = MutableLiveData<Long>()
+    private val swipes = Channel<Long>()
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -21,7 +24,9 @@ class HorizontalSwipeListener : ItemTouchHelper.SimpleCallback(
     override fun onSwiped(
         viewHolder: RecyclerView.ViewHolder,
         direction: Int
-    ) = swipes.postValue(viewHolder.itemId)
+    ) {
+        swipes.offer(viewHolder.itemId)
+    }
 
-    fun swipes(): LiveData<Long> = swipes
+    fun swipes(): Flow<Long> = swipes.consumeAsFlow()
 }

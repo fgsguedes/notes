@@ -15,26 +15,30 @@ import kotlinx.coroutines.launch
 @FlowPreview
 @ExperimentalCoroutinesApi
 abstract class BaseViewModel<A : BaseAction, R : BaseResult, S : BaseState, N : BaseNavigation>(
-    initialState: S,
-    private val dispatcher: CoroutineDispatcher
+    private val baseInteractor: BaseInteractor<A, R>,
+    dispatcher: CoroutineDispatcher,
+    initialState: S
 ) : ViewModel() {
 
-    protected val navigator = ConflatedBroadcastChannel<N>()
-
     private val state = ConflatedBroadcastChannel(initialState)
+    private val navigator = ConflatedBroadcastChannel<N>()
 
     protected val currentState: S
         get() = state.value
 
-    fun state(): Flow<S> = state.asFlow()
-    fun navigation(): Flow<N> = navigator.asFlow()
-
-    fun observe(results: Flow<R>) {
+    init {
         viewModelScope.launch(dispatcher) {
-            results
+            baseInteractor.results()
                 .scan(state.value) { state, result -> reduce(state, result) }
                 .collect { state.offer(it) }
         }
+    }
+
+    fun state(): Flow<S> = state.asFlow()
+    fun navigation(): Flow<N> = navigator.asFlow()
+
+    protected fun navigate(navigation: N) {
+        navigator.offer(navigation)
     }
 
     protected abstract fun reduce(state: S, result: R): S

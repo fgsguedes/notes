@@ -9,9 +9,9 @@ import io.guedes.notes.domain.model.Note
 sealed class ListNotesAction : BaseAction {
     object Init : ListNotesAction()
     object NoteCreated : ListNotesAction()
-    data class InvertSorting(val descendingSort: Boolean) : ListNotesAction()
     data class Delete(val noteId: Long) : ListNotesAction()
     data class UndoDelete(val noteId: Long) : ListNotesAction()
+    data class InvertSorting(val descendingSort: Boolean) : ListNotesAction()
 }
 
 sealed class ListNotesResult : BaseResult {

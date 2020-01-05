@@ -7,7 +7,6 @@ import android.os.Parcelable
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import io.guedes.notes.app.R
@@ -72,8 +71,10 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
         rvNotes.adapter = adapter
         ItemTouchHelper(swipeListener).attachToRecyclerView(rvNotes)
 
-        swipeListener.swipes().observe(this, viewModel::onItemSwipe)
-        adapter.clicks().observe(this, viewModel::onNoteClick)
+        lifecycleScope.launch(Dispatchers.Default) {
+            launch { swipeListener.swipes().collect { viewModel.onItemSwipe(it) } }
+            launch { adapter.clicks().collect { viewModel.onNoteClick(it) } }
+        }
     }
 
     private fun initVm() {

@@ -64,6 +64,7 @@ dependencies {
     testImplementation(Deps.junit)
     testImplementation(Deps.assertJ)
     testImplementation(Deps.mockito)
+    testImplementation(Deps.mockitoInline)
     testImplementation(Deps.mockitoKotlin)
     testImplementation(Deps.coroutinesTest)
 

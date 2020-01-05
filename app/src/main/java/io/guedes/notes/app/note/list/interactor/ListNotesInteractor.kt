@@ -18,12 +18,14 @@ class ListNotesInteractor(
     override fun process(action: Action) = when (action) {
         Action.Init -> onInitAction()
         Action.NoteCreated -> onNoteCreatedAction()
-        is Action.InvertSorting -> onInvertSortingAction(action.descendingSort)
         is Action.Delete -> onDeleteAction(action.noteId)
         is Action.UndoDelete -> onUndoDeleteAction(action.noteId)
+        is Action.InvertSorting -> onInvertSortingAction(action.descendingSort)
     }
 
     private fun onInitAction() = flow { emit(fetchNotesResult()) }
+
+    private fun onNoteCreatedAction() = flow { emit(fetchNotesResult()) }
 
     private fun onInvertSortingAction(descendingSort: Boolean) = flow {
         emit(Result.ChangeSorting(!descendingSort))
@@ -46,8 +48,6 @@ class ListNotesInteractor(
         emit(Result.DeleteCanceled)
         emit(fetchNotesResult())
     }
-
-    private fun onNoteCreatedAction() = flow { emit(fetchNotesResult()) }
 
     private suspend fun fetchNotesResult() = Result.Fetch(notesRepository.list())
 }

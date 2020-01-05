@@ -1,17 +1,20 @@
 package io.guedes.notes.app.note.list.ui
 
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import io.guedes.notes.app.R
 import io.guedes.notes.app.common.inflate
 import io.guedes.notes.domain.model.Note
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.consumeAsFlow
 
+@FlowPreview
 class NotesAdapter : ListAdapter<Note, NotesViewHolder>(NoteDiff) {
 
-    private var clicks = MutableLiveData<Note>()
+    private var clicks = Channel<Note>()
 
     init {
         setHasStableIds(true)
@@ -29,12 +32,12 @@ class NotesAdapter : ListAdapter<Note, NotesViewHolder>(NoteDiff) {
         val note = getItem(position)
 
         holder.bind(note)
-        holder.itemView.setOnClickListener { clicks.postValue(note) }
+        holder.itemView.setOnClickListener { clicks.offer(note) }
     }
 
     override fun getItemId(position: Int) = getItem(position).id
 
-    fun clicks(): LiveData<Note> = clicks
+    fun clicks(): Flow<Note> = clicks.consumeAsFlow()
 }
 
 object NoteDiff : DiffUtil.ItemCallback<Note>() {

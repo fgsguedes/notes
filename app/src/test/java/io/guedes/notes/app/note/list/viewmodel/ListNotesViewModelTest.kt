@@ -28,6 +28,7 @@ import io.guedes.notes.app.note.list.ListNotesResult as Result
 class ListNotesViewModelTest {
 
     private val dispatcher = TestCoroutineDispatcher()
+
     private val results = ConflatedBroadcastChannel<Result>()
     private val interactor: ListNotesInteractor = mock {
         on { results() }.thenReturn(results.asFlow())
@@ -49,16 +50,15 @@ class ListNotesViewModelTest {
 
     // region Actions
     @Test
-    fun `onCreateNote Should navigate to note form without any note`() =
-        dispatcher.runBlockingTest {
-            // WHEN
-            viewModel.onCreateNote()
+    fun `onCreateNote Should navigate to note form without any note`() = dispatcher.runBlockingTest {
+        // WHEN
+        viewModel.onCreateNote()
 
-            // THEN
-            assertThat(viewModel.latestNavigation()).isEqualTo(
-                Navigation.NoteForm(note = null)
-            )
-        }
+        // THEN
+        assertThat(viewModel.latestNavigation()).isEqualTo(
+            Navigation.NoteForm(note = null)
+        )
+    }
 
     @Test
     fun `onNoteCreated Should offer note created action`() {
@@ -70,19 +70,18 @@ class ListNotesViewModelTest {
     }
 
     @Test
-    fun `onNoteClick Should navigate to form with given note`() =
-        dispatcher.runBlockingTest {
-            // GIVEN
-            val note = Note("Note 1", id = 1)
+    fun `onNoteClick Should navigate to form with given note`() = dispatcher.runBlockingTest {
+        // GIVEN
+        val note = Note("Note 1", id = 1)
 
-            // WHEN
-            viewModel.onNoteClick(note)
+        // WHEN
+        viewModel.onNoteClick(note)
 
-            // THEN
-            assertThat(viewModel.latestNavigation()).isEqualTo(
-                Navigation.NoteForm(note)
-            )
-        }
+        // THEN
+        assertThat(viewModel.latestNavigation()).isEqualTo(
+            Navigation.NoteForm(note)
+        )
+    }
 
     @Test
     fun `onUpdateSorting With descending sorting Should offer invert sorting action`() {
@@ -132,115 +131,106 @@ class ListNotesViewModelTest {
 
     // region Results
     @Test
-    fun `on Fetch result Should update state list`() =
-        dispatcher.runBlockingTest {
-            // GIVEN
-            val note1 = Note("First", id = 1)
-            val note2 = Note("Second", id = 2)
+    fun `on Fetch result Should update state list`() = dispatcher.runBlockingTest {
+        // GIVEN
+        val note1 = Note("First", id = 1)
+        val note2 = Note("Second", id = 2)
 
-            val ascendingList = listOf(note1, note2)
-            val descendingList = listOf(note2, note1)
+        val ascendingList = listOf(note1, note2)
+        val descendingList = listOf(note2, note1)
 
-            // WHEN
-            results.offer(Result.Fetch(ascendingList))
+        // WHEN
+        results.offer(Result.Fetch(ascendingList))
 
-            // THEN
-            with(viewModel.state().first()) {
-                assertThat(this).isEqualTo(
-                    initialState.copy(notes = descendingList, descendingSort = true)
-                )
-            }
-        }
-
-    @Test
-    fun `on Sorting result Should update state list`() =
-        dispatcher.runBlockingTest {
-            // GIVEN
-            val note1 = Note("First", id = 1)
-            val note2 = Note("Second", id = 2)
-
-            val ascendingList = listOf(note1, note2)
-
-            results.offer(Result.Fetch(ascendingList))
-
-            // WHEN
-            results.offer(Result.ChangeSorting(descendingSort = false))
-
-            // THEN
-            with(viewModel.state().first()) {
-                assertThat(this).isEqualTo(
-                    initialState.copy(notes = ascendingList, descendingSort = false)
-                )
-            }
-        }
-
-    @Test
-    fun `on Deletion in progress result Should update state`() =
-        dispatcher.runBlockingTest {
-            // WHEN
-            results.offer(Result.DeleteInProgress(1))
-
-            // THEN
-            assertThat(viewModel.latestState()).isEqualTo(
-                initialState.copy(deleteInProgress = 1, undoDeletionAvailable = true)
+        // THEN
+        with(viewModel.state().first()) {
+            assertThat(this).isEqualTo(
+                initialState.copy(notes = descendingList, descendingSort = true)
             )
         }
+    }
 
     @Test
-    fun `on Deletion in progress Should override previous deletion progress`() =
-        dispatcher.runBlockingTest {
-            // GIVEN
-            results.offer(Result.DeleteInProgress(1))
+    fun `on Sorting result Should update state list`() = dispatcher.runBlockingTest {
+        // GIVEN
+        val note1 = Note("First", id = 1)
+        val note2 = Note("Second", id = 2)
 
-            // WHEN
-            results.offer(Result.DeleteInProgress(2))
+        val ascendingList = listOf(note1, note2)
 
-            // THEN
-            assertThat(viewModel.latestState()).isEqualTo(
-                initialState.copy(deleteInProgress = 2, undoDeletionAvailable = true)
-            )
-        }
+        results.offer(Result.Fetch(ascendingList))
 
-    @Test
-    fun `on Deletion completed result Should clean progress`() =
-        dispatcher.runBlockingTest {
-            // GIVEN
-            results.offer(Result.DeleteInProgress(1))
+        // WHEN
+        results.offer(Result.ChangeSorting(descendingSort = false))
 
-            // WHEN
-            results.offer(Result.DeleteCompleted(1))
-
-            // THEN
-            assertThat(viewModel.latestState()).isEqualTo(initialState)
-        }
+        // THEN
+        assertThat(viewModel.latestState()).isEqualTo(
+            initialState.copy(notes = ascendingList, descendingSort = false)
+        )
+    }
 
     @Test
-    fun `on Deletion completed With note id different from deletion in progress Should keep deletion progress`() =
-        dispatcher.runBlockingTest {
-            // GIVEN
-            results.offer(Result.DeleteInProgress(1))
+    fun `on Deletion in progress result Should update state`() = dispatcher.runBlockingTest {
+        // WHEN
+        results.offer(Result.DeleteInProgress(1))
 
-            // WHEN
-            results.offer(Result.DeleteCompleted(2))
-
-            // THEN
-            assertThat(viewModel.latestState()).isEqualTo(
-                initialState.copy(deleteInProgress = 1, undoDeletionAvailable = true)
-            )
-        }
+        // THEN
+        assertThat(viewModel.latestState()).isEqualTo(
+            initialState.copy(deleteInProgress = 1, undoDeletionAvailable = true)
+        )
+    }
 
     @Test
-    fun `on Deletion canceled Should clean deletion progress`() =
-        dispatcher.runBlockingTest {
-            // GIVEN
-            results.offer(Result.DeleteInProgress(1))
+    fun `on Deletion in progress Should override previous deletion progress`() = dispatcher.runBlockingTest {
+        // GIVEN
+        results.offer(Result.DeleteInProgress(1))
 
-            // WHEN
-            results.offer(Result.DeleteCanceled)
+        // WHEN
+        results.offer(Result.DeleteInProgress(2))
 
-            // THEN
-            assertThat(viewModel.latestState()).isEqualTo(initialState)
-        }
+        // THEN
+        assertThat(viewModel.latestState()).isEqualTo(
+            initialState.copy(deleteInProgress = 2, undoDeletionAvailable = true)
+        )
+    }
+
+    @Test
+    fun `on Deletion completed result Should clean progress`() = dispatcher.runBlockingTest {
+        // GIVEN
+        results.offer(Result.DeleteInProgress(1))
+
+        // WHEN
+        results.offer(Result.DeleteCompleted(1))
+
+        // THEN
+        assertThat(viewModel.latestState()).isEqualTo(initialState)
+    }
+
+    @Test
+    fun `on Deletion completed With note id different from deletion in progress Should keep deletion progress`() = dispatcher.runBlockingTest {
+        // GIVEN
+        results.offer(Result.DeleteInProgress(1))
+
+        // WHEN
+        results.offer(Result.DeleteCompleted(2))
+
+        // THEN
+        assertThat(viewModel.latestState()).isEqualTo(
+            initialState.copy(deleteInProgress = 1, undoDeletionAvailable = true)
+        )
+    }
+
+    @Test
+    fun `on Deletion canceled Should clean deletion progress`() = dispatcher.runBlockingTest {
+        // GIVEN
+        results.offer(Result.DeleteInProgress(1))
+
+        // WHEN
+        results.offer(Result.DeleteCanceled)
+
+        // THEN
+        assertThat(viewModel.latestState()).isEqualTo(initialState)
+    }
     // endregion
 
     private suspend fun ListNotesViewModel.latestState(): ListNotesState = state().first()

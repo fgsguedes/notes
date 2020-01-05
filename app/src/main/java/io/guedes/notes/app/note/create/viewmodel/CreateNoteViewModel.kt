@@ -18,10 +18,9 @@ class CreateNoteViewModel(
     private val interactor: CreateNoteInteractor,
     note: Note?,
     dispatcher: CoroutineDispatcher = Dispatchers.Default
-) : BaseViewModel<Action, Result, State, Navigation>(State(), dispatcher) {
+) : BaseViewModel<Action, Result, State, Navigation>(interactor, dispatcher, State()) {
 
     init {
-        observe(interactor.results())
         interactor.offer(Action.Init(note))
     }
 
@@ -46,7 +45,7 @@ class CreateNoteViewModel(
         state.copy(inputValid = isValid)
 
     private fun onNoteCreatedResult(state: State) = state.also {
-        navigator.offer(Navigation.Finish)
+        navigate(Navigation.Finish)
     }
 }
 

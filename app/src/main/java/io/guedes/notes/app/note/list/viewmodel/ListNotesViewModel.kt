@@ -17,10 +17,9 @@ import io.guedes.notes.app.note.list.ListNotesState as State
 class ListNotesViewModel(
     private val interactor: ListNotesInteractor,
     dispatcher: CoroutineDispatcher = Dispatchers.Default
-) : BaseViewModel<Action, Result, State, Navigation>(State(), dispatcher) {
+) : BaseViewModel<Action, Result, State, Navigation>(interactor, dispatcher, State()) {
 
     init {
-        observe(interactor.results())
         interactor.offer(Action.Init)
     }
 
@@ -33,7 +32,7 @@ class ListNotesViewModel(
     }
 
     fun onCreateNote() {
-        navigator.offer(Navigation.NoteForm(note = null))
+        navigate(Navigation.NoteForm(note = null))
     }
 
     fun onNoteCreated() {
@@ -41,7 +40,7 @@ class ListNotesViewModel(
     }
 
     fun onNoteClick(note: Note) {
-        navigator.offer(Navigation.NoteForm(note))
+        navigate(Navigation.NoteForm(note))
     }
 
     fun onUpdateSorting() {
