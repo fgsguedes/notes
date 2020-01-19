@@ -39,5 +39,5 @@ fun listNotes(notesRepository: NoteRepository) = ListNotesViewModelFactory(
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun createNote(notesRepository: NoteRepository, note: Note?) = CreateNoteViewModelFactory(
-    lazy { CreateNoteInteractor(notesRepository) }, defaultDispatcher, note
+    lazy { CreateNoteInteractor(notesRepository, note) }, defaultDispatcher
 )

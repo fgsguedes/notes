@@ -70,24 +70,21 @@ class ListNotesInteractorTest {
     }
 
     @Test
-    fun `on InvertSorting action with true descending Should change sorting`() = runBlockingTest {
+    fun `on InvertSorting action Should change sorting`() = runBlockingTest {
         // WHEN
-        interactor.offer(Action.InvertSorting(descendingSort = true))
+        interactor.offer(Action.InvertSorting)
+        interactor.offer(Action.InvertSorting)
+        interactor.offer(Action.InvertSorting)
+        interactor.offer(Action.InvertSorting)
 
         // THEN
-        assertThat(interactor.latestResult()).isEqualTo(
-            Result.ChangeSorting(descendingSort = false)
-        )
-    }
-
-    @Test
-    fun `on InvertSorting action with false descending Should change sorting`() = runBlockingTest {
-        // WHEN
-        interactor.offer(Action.InvertSorting(descendingSort = false))
-
-        // THEN
-        assertThat(interactor.latestResult()).isEqualTo(
-            Result.ChangeSorting(descendingSort = true)
+        assertThat(interactor.latestResults(4)).isEqualTo(
+            listOf(
+                Result.ChangeSorting(descendingSort = false),
+                Result.ChangeSorting(descendingSort = true),
+                Result.ChangeSorting(descendingSort = false),
+                Result.ChangeSorting(descendingSort = true)
+            )
         )
     }
 
@@ -101,7 +98,7 @@ class ListNotesInteractorTest {
             listOf(
                 Result.Fetch(dummyList),
                 Result.DeleteInProgress(1L),
-                Result.DeleteCompleted(1L)
+                Result.DeleteCompleted
             )
         )
 

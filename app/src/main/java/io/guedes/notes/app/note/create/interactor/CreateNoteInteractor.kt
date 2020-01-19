@@ -7,30 +7,29 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import io.guedes.notes.app.note.create.CreateNoteAction as Action
+import io.guedes.notes.app.note.create.CreateNoteNavigation as Navigation
 import io.guedes.notes.app.note.create.CreateNoteResult as Result
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 class CreateNoteInteractor(
-    private val noteRepository: NoteRepository
-) : BaseInteractor<Action, Result>() {
+    private val noteRepository: NoteRepository,
+    private val note: Note?
+) : BaseInteractor<Action, Result, Navigation>() {
 
     override fun process(action: Action) =
         when (action) {
-            is Action.Init -> onInitAction(action.note)
-            is Action.InputChanged ->
-                onInputChangedAction(action.noteId, action.title, action.content)
+            Action.Init -> onInitAction()
+            is Action.SaveNote -> onInputChangedAction(action.title, action.content)
         }
 
-    private fun onInitAction(note: Note?) =
+    private fun onInitAction() =
         if (note == null) emptyFlow()
-        else flow {
-            emit(Result.InitResult(note.id))
-            emit(Result.InputChanged(note.title, note.content))
-        }
+        else flowOf(Result.InputChanged(note.title, note.content))
 
-    private fun onInputChangedAction(noteId: Long, title: String, content: String) = flow {
+    private fun onInputChangedAction(title: String, content: String) = flow {
         val isValid = title.isNotBlank()
         val formattedContent = content.takeIf { it.isNotBlank() }
 
@@ -38,9 +37,9 @@ class CreateNoteInteractor(
         emit(Result.Validation(isValid = isValid))
 
         if (isValid) {
-            val note = Note(id = noteId, title = title, content = formattedContent)
+            val note = Note(id = note?.id ?: 0, title = title, content = formattedContent)
             noteRepository.save(note)
-            emit(Result.NoteCreated)
+            offer(Navigation.Finish)
         }
     }
 }

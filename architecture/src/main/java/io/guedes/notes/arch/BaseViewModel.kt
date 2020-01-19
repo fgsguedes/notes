@@ -15,16 +15,12 @@ import kotlinx.coroutines.launch
 @FlowPreview
 @ExperimentalCoroutinesApi
 abstract class BaseViewModel<A : BaseAction, R : BaseResult, S : BaseState, N : BaseNavigation>(
-    private val baseInteractor: BaseInteractor<A, R>,
+    private val baseInteractor: BaseInteractor<A, R, N>,
     dispatcher: CoroutineDispatcher,
     initialState: S
 ) : ViewModel() {
 
     private val state = ConflatedBroadcastChannel(initialState)
-    private val navigator = ConflatedBroadcastChannel<N>()
-
-    protected val currentState: S
-        get() = state.value
 
     init {
         viewModelScope.launch(dispatcher) {
@@ -35,11 +31,7 @@ abstract class BaseViewModel<A : BaseAction, R : BaseResult, S : BaseState, N : 
     }
 
     fun state(): Flow<S> = state.asFlow()
-    fun navigation(): Flow<N> = navigator.asFlow()
-
-    protected fun navigate(navigation: N) {
-        navigator.offer(navigation)
-    }
+    fun navigation(): Flow<N> = baseInteractor.navigation()
 
     protected abstract fun reduce(state: S, result: R): S
 }

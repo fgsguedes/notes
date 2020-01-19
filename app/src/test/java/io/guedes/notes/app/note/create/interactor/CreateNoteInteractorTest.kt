@@ -3,13 +3,12 @@ package io.guedes.notes.app.note.create.interactor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import io.guedes.notes.app.note.create.CreateNoteAction
-import io.guedes.notes.app.note.create.CreateNoteResult
 import io.guedes.notes.domain.model.Note
 import io.guedes.notes.domain.repository.NoteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -20,6 +19,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import io.guedes.notes.app.note.create.CreateNoteAction as Action
+import io.guedes.notes.app.note.create.CreateNoteNavigation as Navigation
+import io.guedes.notes.app.note.create.CreateNoteResult as Result
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -28,8 +30,6 @@ class CreateNoteInteractorTest {
     private val dispatcher = TestCoroutineDispatcher()
 
     private val repository: NoteRepository = mock()
-    private val interactor = CreateNoteInteractor(repository)
-
 
     @BeforeEach
     fun setUp() {
@@ -46,16 +46,14 @@ class CreateNoteInteractorTest {
     fun `on Init action`() = runBlockingTest {
         // GIVEN
         val note = Note(id = 1L, title = "Title", content = "Content")
+        val interactor = createInteractor(note)
 
         // WHEN
-        interactor.offer(CreateNoteAction.Init(note))
+        interactor.offer(Action.Init)
 
         // THEN
-        assertThat(interactor.latestResults(2)).isEqualTo(
-            listOf(
-                CreateNoteResult.InitResult(noteId = 1L),
-                CreateNoteResult.InputChanged(title = "Title", content = "Content")
-            )
+        assertThat(interactor.latestResult()).isEqualTo(
+            Result.InputChanged(title = "Title", content = "Content")
         )
     }
 
@@ -63,35 +61,47 @@ class CreateNoteInteractorTest {
     fun `on InputChanged action With valid data Should save note`() = runBlockingTest {
         // GIVEN
         val note = Note(id = 1L, title = "Title", content = "Content")
+        val interactor = createInteractor(note)
 
         // WHEN
-        interactor.offer(CreateNoteAction.InputChanged(1L, "Title", "Content"))
+        interactor.offer(Action.SaveNote("Title", "Content"))
 
         // THEN
-        assertThat(interactor.latestResults(3)).isEqualTo(
+        assertThat(interactor.latestResults(2)).isEqualTo(
             listOf(
-                CreateNoteResult.InputChanged("Title", "Content"),
-                CreateNoteResult.Validation(isValid = true),
-                CreateNoteResult.NoteCreated
+                Result.InputChanged("Title", "Content"),
+                Result.Validation(isValid = true)
             )
+        )
+        assertThat(interactor.latestNavigation()).isEqualTo(
+            Navigation.Finish
         )
         verify(repository).save(note)
     }
 
     @Test
     fun `on InputChanged action With invalid data Should not save note`() = runBlockingTest {
+        // GIVEN
+        val interactor = createInteractor()
+
         // WHEN
-        interactor.offer(CreateNoteAction.InputChanged(0L, "", "Content"))
+        interactor.offer(Action.SaveNote("", "Content"))
 
         // THEN
         assertThat(interactor.latestResults(2)).isEqualTo(
             listOf(
-                CreateNoteResult.InputChanged("", "Content"),
-                CreateNoteResult.Validation(isValid = false)
+                Result.InputChanged("", "Content"),
+                Result.Validation(isValid = false)
             )
         )
         verifyNoMoreInteractions(repository)
     }
 
+    private fun createInteractor(note: Note? = null) =
+        CreateNoteInteractor(repository, note)
+
+    private suspend fun CreateNoteInteractor.latestResult() = results().first()
     private suspend fun CreateNoteInteractor.latestResults(amount: Int) = results().take(amount).toList()
+
+    private suspend fun CreateNoteInteractor.latestNavigation() = navigation().first()
 }

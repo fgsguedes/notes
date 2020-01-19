@@ -35,7 +35,7 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     private val adapter by lazy { NotesAdapter() }
     private val swipeListener by lazy { HorizontalSwipeListener() }
 
-    private var deleteInProgress: Long? = null
+    private var deleteInProgress: Long = 0
     private var undoSnackBar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +87,7 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
     private fun onStateChanged(state: State) {
         adapter.submitList(state.notes)
 
-        if (state.undoDeletionAvailable) showUndoSnackbar(state.deleteInProgress)
+        if (state.deleteInProgress != 0L) showUndoSnackbar(state.deleteInProgress)
         else hideUndoSnackbar()
     }
 
@@ -102,12 +102,12 @@ class ListNotesActivity : AppCompatActivity(R.layout.activity_list_notes) {
 
         undoSnackBar?.dismiss()
         undoSnackBar = Snackbar.make(clListNotes, "Deleted", Snackbar.LENGTH_INDEFINITE)
-            .setAction("Undo") { viewModel.onUndoDelete() }
+            .setAction("Undo") { viewModel.onUndoDelete(deleteInProgress) }
             .also { it.show() }
     }
 
     private fun hideUndoSnackbar() {
-        deleteInProgress = null
+        deleteInProgress = 0
         undoSnackBar?.dismiss()
     }
 

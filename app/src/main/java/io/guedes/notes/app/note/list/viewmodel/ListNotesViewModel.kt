@@ -26,12 +26,12 @@ class ListNotesViewModel(
         is Result.Fetch -> onFetchResult(state, result.notes)
         is Result.ChangeSorting -> onSortingResult(state, result.descendingSort)
         is Result.DeleteInProgress -> onDeleteInProgressResult(state, result.noteId)
-        is Result.DeleteCompleted -> onDeleteCompletedResult(state, result.noteId)
+        is Result.DeleteCompleted -> onDeleteCompletedResult(state)
         Result.DeleteCanceled -> onDeleteCanceledResult(state)
     }
 
     fun onCreateNote() {
-        navigate(Navigation.NoteForm(note = null))
+        interactor.offer(Action.CreateNote)
     }
 
     fun onNoteCreated() {
@@ -39,19 +39,19 @@ class ListNotesViewModel(
     }
 
     fun onNoteClick(note: Note) {
-        navigate(Navigation.NoteForm(note))
+        interactor.offer(Action.EditNote(note))
     }
 
     fun onUpdateSorting() {
-        interactor.offer(Action.InvertSorting(currentState.descendingSort))
+        interactor.offer(Action.InvertSorting)
     }
 
     fun onItemSwipe(noteId: Long) {
         interactor.offer(Action.Delete(noteId))
     }
 
-    fun onUndoDelete() {
-        interactor.offer(Action.UndoDelete(currentState.deleteInProgress))
+    fun onUndoDelete(noteId: Long) {
+        interactor.offer(Action.UndoDelete(noteId))
     }
 
     // region Results
@@ -65,25 +65,13 @@ class ListNotesViewModel(
         )
 
     private fun onDeleteInProgressResult(state: State, noteId: Long) =
-        state.copy(
-            deleteInProgress = noteId,
-            undoDeletionAvailable = true
-        )
+        state.copy(deleteInProgress = noteId)
 
-    private fun onDeleteCompletedResult(state: State, noteId: Long): State {
-        val newDeleteInProgress = state.deleteInProgress.takeIf { it != noteId } ?: 0
-
-        return state.copy(
-            deleteInProgress = newDeleteInProgress,
-            undoDeletionAvailable = newDeleteInProgress != 0L
-        )
-    }
+    private fun onDeleteCompletedResult(state: State) =
+        state.copy(deleteInProgress = 0)
 
     private fun onDeleteCanceledResult(state: State) =
-        state.copy(
-            undoDeletionAvailable = false,
-            deleteInProgress = 0
-        )
+        state.copy(deleteInProgress = 0)
     // endregion
 
     private fun List<Note>.sorted(descendingSort: Boolean): List<Note> =

@@ -4,23 +4,15 @@ import io.guedes.notes.arch.BaseAction
 import io.guedes.notes.arch.BaseNavigation
 import io.guedes.notes.arch.BaseResult
 import io.guedes.notes.arch.BaseState
-import io.guedes.notes.domain.model.Note
 
 sealed class CreateNoteAction : BaseAction {
-    data class Init(val note: Note?) : CreateNoteAction()
-
-    data class InputChanged(
-        val noteId: Long,
-        val title: String,
-        val content: String
-    ) : CreateNoteAction()
+    object Init : CreateNoteAction()
+    data class SaveNote(val title: String, val content: String) : CreateNoteAction()
 }
 
 sealed class CreateNoteResult : BaseResult {
-    data class InitResult(val noteId: Long) : CreateNoteResult()
     data class InputChanged(val title: String, val content: String?) : CreateNoteResult()
     data class Validation(val isValid: Boolean) : CreateNoteResult()
-    object NoteCreated : CreateNoteResult()
 }
 
 sealed class CreateNoteNavigation : BaseNavigation {
@@ -28,7 +20,6 @@ sealed class CreateNoteNavigation : BaseNavigation {
 }
 
 data class CreateNoteState(
-    val noteId: Long = 0,
     val title: String = "",
     val content: String? = null,
     val inputValid: Boolean = true
