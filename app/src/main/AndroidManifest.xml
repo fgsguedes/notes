@@ -12,7 +12,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="io.guedes.notes.app.note.list.ui.ListNotesActivity"
+            android:name=".note.list.ui.ListNotesActivity"
             android:label="@string/app_name">
 
             <intent-filter>
